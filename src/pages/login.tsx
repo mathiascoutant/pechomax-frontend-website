@@ -2,6 +2,7 @@ import React from 'react';
 import '../index.css'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -29,7 +30,9 @@ const Login: React.FC = () => {
   return (
     <div className="bg-[url('./src/assets/images/background-login.jpeg')] flex flex-col h-screen w-screen bg-no-repeat m-0 p-0">
       <div className='w-screen'>
-        <img className='w-20' src="./src/assets/images/logo.png" alt="" />
+        <Link to="/">
+          <img className='w-20' src="./src/assets/images/logo.png" alt="" />
+        </Link>
       </div>
       <div className='flex items-center justify-center bg-white max-w-96 w-auto m-auto'>
           <div className='m-auto w-fit p-10'>
