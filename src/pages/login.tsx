@@ -14,7 +14,10 @@ const Login: React.FC = () => {
             username: data.get('username') as string | null,
             password: data.get('password') as string | null
         }
-        axios.post('http://localhost:3000/users/login', returnData)
+        axios.post('http://localhost:3000/users/auth/login', returnData, {
+            withCredentials: true,
+            
+        })
         .then(response => {
             return response.data;
         })
