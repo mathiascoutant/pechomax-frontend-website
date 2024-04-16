@@ -1,20 +1,18 @@
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import Header from '../src/components/Header';
 import Barre from '../src/components/Barre';
+import { useUserStore } from '../src/pages/assets/store';
 
-const App = () => {
-  const token = localStorage.getItem('access_token');
-  if (token == null) {
-    const navigate = useNavigate();
-    navigate('/login');
-  } else {
-    console.log("okk");
-  }
+const App: React.FC = () => {
+  const { username } = useUserStore();
+
   return (
-      <div>
-        <Header />
-        <Barre />
-      </div>
+    <div>
+      <Header />
+      <Barre />
+      {/* Afficher le nom d'utilisateur */}
+      {username && <p>Username: {username}</p>}
+    </div>
   );
 }
 
