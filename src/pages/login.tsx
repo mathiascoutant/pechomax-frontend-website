@@ -1,11 +1,16 @@
 import React from 'react';
 import '../index.css'
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from "react-router-dom";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+
+  const token = localStorage.getItem('access_token');
+  if (token !== null) {
+    const navigate = useNavigate();
+    navigate('/');
+  }
 
     const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();

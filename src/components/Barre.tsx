@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 
 function Barre() {
-
   return (
     <>
       <div className='bg-[#323640] w-40 h-screen pt-3'>

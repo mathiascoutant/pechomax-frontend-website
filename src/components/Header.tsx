@@ -1,8 +1,12 @@
-import React from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 function Header() {
-
+  const handleLogout = () => {
+    axios.get('http://localhost:3000/users/auth/logout', {
+      withCredentials: true
+    })
+  };
   return (
     <>
       <div>
@@ -10,7 +14,7 @@ function Header() {
           <Link to="/">
             <img className='w-20' src="./src/assets/images/logo.png" alt="" />
           </Link>
-          <Link className='text-right	mr-10 pt-6' to="/login">Déconnexion</Link>
+          <button className='right-10 top-7 w-fit absolute' onClick={handleLogout}>Déconnexion</button>
         </div>
       </div>
     </>
