@@ -8,9 +8,9 @@ function User() {
         <Header />
         <div className='flex flex-cols-2 w-full'>
           <Barre />
-          <div className='mx-auto mt-10'>
+          <div className='w-7/12 mx-auto mt-10'>
             <div className='bg-slate-100 p-3 grid grid-cols-2 gap-20'>
-                <div className='grid grid-cols-2 bg-white rounded-md w-fit p-2 mb-4 gap-4'>
+                <div className='grid grid-cols-2 bg-white rounded-md  p-2 gap-4'>
                     <div className='w-fit'>
                         <p className='mb-4'>Username:</p>
                         <p className='mb-4'>Email:</p>
@@ -26,7 +26,7 @@ function User() {
                         <input className='mb-4' type="text" value={"Aquitaine"} placeholder="Département"/>
                     </div>
                 </div>
-                <div className='grid grid-cols-2 bg-white rounded-md w-fit p-2 mb-4 gap-4'>
+                <div className='grid grid-cols-2 bg-white rounded-md w-fit p-2 gap-4'>
                     <div>
                         <p className='mb-4'>Id:</p>
                         <p className='mb-4'>Role:</p>

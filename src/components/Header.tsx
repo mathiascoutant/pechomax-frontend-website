@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useUserStore } from '../pages/assets/store';
 
 function Header() {
   const handleLogout = () => {
@@ -7,6 +8,7 @@ function Header() {
       withCredentials: true
     })
   };
+  const { username } = useUserStore();
   return (
     <>
       <div>
@@ -14,7 +16,10 @@ function Header() {
           <Link to="/">
             <img className='w-20' src="./src/assets/images/logo.png" alt="" />
           </Link>
-          <button className='right-10 top-7 w-fit absolute' onClick={handleLogout}>Déconnexion</button>
+          <div className='grid grid-cols-2 w-50'>
+            <a className='right-44 top-7 w-fit absolute' href="/user/update/">{username && <p>{username}</p>} </a>
+            <button className='right-6 top-7 w-fit absolute' onClick={handleLogout}>Déconnexion</button>
+          </div>
         </div>
       </div>
     </>

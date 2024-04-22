@@ -5,7 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-  const { username, setUsername } = useUserStore(); // Utilisez directement la fonction setUsername
+  const {username, setUsername } = useUserStore(); // Utilisez directement la fonction setUsername
 
   useEffect(() => {
     // Vérifier et rediriger automatiquement vers la page d'accueil si un nom d'utilisateur est déjà enregistré

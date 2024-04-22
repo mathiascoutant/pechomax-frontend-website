@@ -10,7 +10,6 @@ const App: React.FC = () => {
     <div>
       <Header />
       <Barre />
-      {/* Afficher le nom d'utilisateur */}
       {username && <p>Username: {username}</p>}
     </div>
   );
