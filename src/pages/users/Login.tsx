@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useUserStore } from '../pages/assets/store';
+import { useUserStore } from '../assets/store';
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -11,8 +11,6 @@ const Login: React.FC = () => {
     // Vérifier et rediriger automatiquement vers la page d'accueil si un nom d'utilisateur est déjà enregistré
     if (username) {
       navigate('/');
-    } else {
-      console.log(username);
     }
   }, [username, navigate]);
 
@@ -24,9 +22,7 @@ const Login: React.FC = () => {
       password: data.get('password') as string | null
     };
     try {
-      const response = await axios.post('http://localhost:3000/users/auth/login', returnData, { withCredentials: true });
-      const { data } = response;
-      localStorage.setItem('token', data.access_token);
+      await axios.post('http://localhost:3000/auth/login', returnData, { withCredentials: true });
       setUsername(returnData.username);
     } catch (error) {
       console.error('Error:', error);
