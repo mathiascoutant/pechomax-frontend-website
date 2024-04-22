@@ -35,6 +35,7 @@ function ListCategories() {
       await axios.delete(`http://localhost:3000/categories/delete/${categorieId}`, { withCredentials: true });
       // Supprimer la catégorie de la liste une fois qu'elle est supprimé avec succès
       setCategories(categories.filter(categorie => categorie.id !== categorieId));
+      window.location.href = "/listCategories";
     } catch (error) {
       console.error('Error deleting categorie:', error);
     }
@@ -49,10 +50,11 @@ function ListCategories() {
           <div className='mx-auto mt-10'>
             <div className='bg-slate-100 p-3'>
               {categories.map((categorie, index) => (
-                <div key={index} className='grid grid-cols-3 gap-4 bg-[#A7C4E4] p-2 mb-4 w-12/12 mx-auto'>
+                <div key={index} className='grid grid-cols-4 gap-4 bg-[#A7C4E4] p-2 mb-4 w-12/12 mx-auto'>
+                  <p className='text-sm'>Id: {categorie.id}</p>
                   <p>Name: {categorie.name}</p>
                   <a className='text-center' href={`./categories/update/${categorie.id}`}>Modifier</a>
-                  <button className='text-right hover:bg-red-700 w-fit' onClick={() => handleCategorieDelete(categorie.id)}>Supprimer</button>
+                  <button className='hover:bg-red-700' onClick={() => handleCategorieDelete(categorie.id)}>Supprimer</button>
                 </div>
               ))}
             </div>

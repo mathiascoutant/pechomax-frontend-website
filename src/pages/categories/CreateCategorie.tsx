@@ -13,6 +13,7 @@ const CreateCategorie: React.FC = () => {
             }
             axios.post('http://localhost:3000/categories/create', returnData, { withCredentials: true })
                 .then(response => {
+                    window.location.href = "/listCategories";
                     return response.data;
                 })
                 .catch(error => {

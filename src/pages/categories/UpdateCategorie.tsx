@@ -38,6 +38,7 @@ function UpdateCategorie() {
       console.log('Categorie updated:', response.data);
       // Mettre à jour l'état local de la catégorie avec les nouvelles données si la mise à jour est réussie
       setCategorie(response.data);
+      window.location.href = "/listCategories";
     } catch (error) {
       console.error('Error updating categorie:', error);
     }
