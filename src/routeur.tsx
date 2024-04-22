@@ -7,6 +7,7 @@ import Init from './pages/users/Init';
 import App from './App';
 import CreateCategorie from './pages/categories/CreateCategorie';
 import ListCategories from './pages/categories/ListCategories';
+import UpdateCategorie from './pages/categories/UpdateCategorie';
 
 const AppRouter = () => {
   return (
@@ -19,10 +20,9 @@ const AppRouter = () => {
           <Route path="/listUsers" element={<ListUsers />} />
           <Route path="/users/update/:username" element={<User />} />
           <Route path="/users/:username" element={<InfoUser />} />
-          <Route path="/listcategories" element={<ListCategories />} />
+          <Route path="/listCategories" element={<ListCategories />} />
           <Route path="/categories/create" element={<CreateCategorie />} />
-          <Route path="/categories/:id" element={""} />
-          <Route path="/categories/update/:id" element={""} />
+          <Route path="/categories/update/:id" element={<UpdateCategorie />} />
           <Route path="/categories/delete/:id" element={""} />
           <Route path="/conversations/" element={""} />
           <Route path="/conversations/create" element={""} />
