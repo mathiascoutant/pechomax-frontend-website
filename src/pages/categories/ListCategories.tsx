@@ -51,7 +51,7 @@ function ListCategories() {
               {categories.map((categorie, index) => (
                 <div key={index} className='grid grid-cols-3 gap-4 bg-[#A7C4E4] p-2 mb-4 w-12/12 mx-auto'>
                   <p>Name: {categorie.name}</p>
-                  <a className='text-center' href={`./categories/update/${categorie.name}`}>Modifier</a>
+                  <a className='text-center' href={`./categories/update/${categorie.id}`}>Modifier</a>
                   <button className='text-right hover:bg-red-700 w-fit' onClick={() => handleCategorieDelete(categorie.id)}>Supprimer</button>
                 </div>
               ))}
