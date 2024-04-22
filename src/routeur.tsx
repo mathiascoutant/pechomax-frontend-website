@@ -8,6 +8,9 @@ import App from './App';
 import CreateCategorie from './pages/categories/CreateCategorie';
 import ListCategories from './pages/categories/ListCategories';
 import UpdateCategorie from './pages/categories/UpdateCategorie';
+import ListConversations from './pages/conversations/ListConversations';
+import InfoConversations from './pages/conversations/InfoConversation';
+
 
 const AppRouter = () => {
   return (
@@ -23,9 +26,8 @@ const AppRouter = () => {
           <Route path="/listCategories" element={<ListCategories />} />
           <Route path="/categories/create" element={<CreateCategorie />} />
           <Route path="/categories/update/:id" element={<UpdateCategorie />} />
-          <Route path="/categories/delete/:id" element={""} />
-          <Route path="/conversations/" element={""} />
-          <Route path="/conversations/create" element={""} />
+          <Route path="/listConversations" element={<ListConversations />} />
+          <Route path="/conversations/:id" element={<InfoConversations />} />
           <Route path="/conversations/update/:id" element={""} />
           <Route path="/conversations/delete/:id" element={""} />
         </Routes>
