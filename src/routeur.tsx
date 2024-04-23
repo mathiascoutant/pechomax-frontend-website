@@ -21,12 +21,12 @@ import UpdateLocation from './pages/locations/UpdateLocation';
 import CreateCatch from './pages/catches/CreateCatch';
 import ListCatch from './pages/catches/ListCatches';
 import UpdateCatch from './pages/catches/UpdateCatch';
-
-
 import CreateSpecie from './pages/species/CreateSpecie';
 import ListSpecies from './pages/species/ListSpecies';
 import UpdateSpecie from './pages/species/UpdateSpecie';
-
+import CreateLevel from './pages/levels/CreateLevel';
+import ListLevels from './pages/levels/ListLevels';
+import UpdateLevel from './pages/levels/UpdateLevel';
 
 const AppRouter = () => {
   return (
@@ -52,13 +52,15 @@ const AppRouter = () => {
           <Route path="/catches/create" element={< CreateCatch />} />
           <Route path="/listcatches" element={<ListCatch />} />
           <Route path="/catches/update/:id" element={< UpdateCatch/>} />
-
           <Route path="/locations/create" element={<CreateLocation />} />
           <Route path="/listLocations" element={<ListLocations />} />
           <Route path="/locations/update/:id" element={< UpdateLocation />} />
           <Route path="/species/create" element={<CreateSpecie />} />
           <Route path="/listSpecies" element={<ListSpecies />} />
           <Route path="/species/update/:id" element={<UpdateSpecie />} />
+          <Route path="/levels/create" element={< CreateLevel/>} />
+          <Route path="/listlevels" element={< ListLevels/>} />
+          <Route path="/levels/update/:id" element={< UpdateLevel/>} />
         </Routes>
     </BrowserRouter>
   );

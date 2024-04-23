@@ -27,7 +27,7 @@ function Barre() {
             <Link to="/listspecies">Species</Link>
           </div>
           <div className='hover:bg-[#3D424E] text-white w-full p-2 m-auto text-left'>
-            <Link to="/listspecies">Levels</Link>
+            <Link to="/listlevels">Levels</Link>
           </div>
         </div>
       </div>
