@@ -17,8 +17,11 @@ function Barre() {
           <div className='hover:bg-[#3D424E] text-white w-full p-2 m-auto text-left mb-4'>
             <Link to="/listcategories">Catégories</Link>
           </div>
-          <div className='hover:bg-[#3D424E] text-white w-full p-2 m-auto text-left'>
+          <div className='hover:bg-[#3D424E] text-white w-full p-2 m-auto text-left mb-4'>
             <Link to="/listmessages">Messages</Link>
+          </div>
+          <div className='hover:bg-[#3D424E] text-white w-full p-2 m-auto text-left'>
+            <Link to="/listlocations">Locations</Link>
           </div>
         </div>
       </div>

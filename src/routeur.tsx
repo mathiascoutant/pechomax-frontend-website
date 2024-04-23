@@ -15,6 +15,9 @@ import UpdateConversation from './pages/conversations/UpdateConversations';
 import ListMessages from './pages/messages/ListMessages';
 import CreateMessage from './pages/messages/CreateMessage';
 import UpdateMessage from './pages/messages/UpdateMessage';
+import CreateLocation from './pages/locations/CreateLocation';
+import ListLocations from './pages/locations/ListLocations';
+import UpdateLocation from './pages/locations/UpdateLocation';
 
 
 const AppRouter = () => {
@@ -38,6 +41,10 @@ const AppRouter = () => {
           <Route path="/listmessages" element={<ListMessages />} />
           <Route path="/messages/create" element={<CreateMessage />} />
           <Route path="/messages/update/:id" element={< UpdateMessage />} />
+
+          <Route path="/locations/create" element={<CreateLocation />} />
+          <Route path="/listLocations" element={<ListLocations />} />
+          <Route path="/locations/update/:id" element={< UpdateLocation />} />
         </Routes>
     </BrowserRouter>
   );
