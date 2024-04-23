@@ -18,6 +18,9 @@ import UpdateMessage from './pages/messages/UpdateMessage';
 import CreateLocation from './pages/locations/CreateLocation';
 import ListLocations from './pages/locations/ListLocations';
 import UpdateLocation from './pages/locations/UpdateLocation';
+import CreateSpecie from './pages/species/CreateSpecie';
+import ListSpecies from './pages/species/ListSpecies';
+import UpdateSpecie from './pages/species/UpdateSpecie';
 
 
 const AppRouter = () => {
@@ -45,6 +48,9 @@ const AppRouter = () => {
           <Route path="/locations/create" element={<CreateLocation />} />
           <Route path="/listLocations" element={<ListLocations />} />
           <Route path="/locations/update/:id" element={< UpdateLocation />} />
+          <Route path="/species/create" element={<CreateSpecie />} />
+          <Route path="/listSpecies" element={<ListSpecies />} />
+          <Route path="/species/update/:id" element={<UpdateSpecie />} />
         </Routes>
     </BrowserRouter>
   );
