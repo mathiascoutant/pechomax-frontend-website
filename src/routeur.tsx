@@ -12,6 +12,7 @@ import CreateConversation from './pages/conversations/CreateConversation';
 import ListConversations from './pages/conversations/ListConversations';
 import InfoConversations from './pages/conversations/InfoConversation';
 import UpdateConversation from './pages/conversations/UpdateConversations';
+import CreateMessage from './pages/messages/CreateMessage';
 
 
 const AppRouter = () => {
@@ -32,7 +33,7 @@ const AppRouter = () => {
           <Route path="/listConversations" element={<ListConversations />} />
           <Route path="/conversations/:id" element={<InfoConversations />} />
           <Route path="/conversations/update/:id" element={<UpdateConversation />} />
-          <Route path="/conversations/delete/:id" element={""} />
+          <Route path="/messages/create" element={<CreateMessage />} />
         </Routes>
     </BrowserRouter>
   );

@@ -73,7 +73,7 @@ function UpdateConversation() {
                 <div className='grid grid-cols-2 bg-white rounded-md  p-2 gap-4'>
                   <div className='w-fit'>
                     <p className='mb-4'>Id:</p>
-                    <p className='mb-4'>User Id:</p>
+                    <p className='mb-4'>Username:</p>
                     <p className='mb-4'>Title:</p>
                     <p className='mb-4'>Category Id:</p>
                     <p className='mb-4'>Created At:</p>

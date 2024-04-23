@@ -10,7 +10,7 @@ interface CategorieData {
     description: string;
     createdAt: string;
     updatedAt: string;
-  }
+}
   
 
 const CreateConversation: React.FC = () => {
