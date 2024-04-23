@@ -5,7 +5,6 @@ import Barre from '../../components/Barre';
 import { useUserStore } from '../assets/store';
 import { useParams } from 'react-router-dom';
 
-// Interface décrivant la structure des données utilisateur
 interface CategorieData {
   id: string;
   name: string;
@@ -27,8 +26,7 @@ function UpdateCategorie() {
     };
 
     fetchName();
-  }, [id]); // Ajouter categorie comme dépendance pour que useEffect soit déclenché à chaque changement du paramètre name
-
+  }, [id]); 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

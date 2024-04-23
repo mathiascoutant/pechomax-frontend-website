@@ -19,7 +19,7 @@ const Init: React.FC = () => {
                 password: data.get('password') as string | null,
                 role: "Admin" as string | null
             }
-            axios.post('http://localhost:3000/auth/init', returnData)
+            axios.post('http://localhost:3000/auth/init', returnData, { withCredentials: true })
                 .then(response => {
                     return response.data;
                 })

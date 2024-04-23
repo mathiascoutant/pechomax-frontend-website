@@ -29,7 +29,7 @@ function ListUsers() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get<UserData>(`http://localhost:3000/users/${username}`);
+        const response = await axios.get<UserData>(`http://localhost:3000/users/${username}`, { withCredentials: true });
         setUser(response.data);
       } catch (error) {
         console.error('Error fetching user:', error);
