@@ -18,6 +18,11 @@ import UpdateMessage from './pages/messages/UpdateMessage';
 import CreateLocation from './pages/locations/CreateLocation';
 import ListLocations from './pages/locations/ListLocations';
 import UpdateLocation from './pages/locations/UpdateLocation';
+import CreateCatch from './pages/catches/CreateCatch';
+import ListCatch from './pages/catches/ListCatches';
+import UpdateCatch from './pages/catches/UpdateCatch';
+
+
 import CreateSpecie from './pages/species/CreateSpecie';
 import ListSpecies from './pages/species/ListSpecies';
 import UpdateSpecie from './pages/species/UpdateSpecie';
@@ -44,6 +49,9 @@ const AppRouter = () => {
           <Route path="/listmessages" element={<ListMessages />} />
           <Route path="/messages/create" element={<CreateMessage />} />
           <Route path="/messages/update/:id" element={< UpdateMessage />} />
+          <Route path="/catches/create" element={< CreateCatch />} />
+          <Route path="/listcatches" element={<ListCatch />} />
+          <Route path="/catches/update/:id" element={< UpdateCatch/>} />
 
           <Route path="/locations/create" element={<CreateLocation />} />
           <Route path="/listLocations" element={<ListLocations />} />
