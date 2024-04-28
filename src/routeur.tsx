@@ -4,7 +4,6 @@ import ListUsers from './pages/users/ListUsers';
 import User from './pages/users/UpdateUser';
 import InfoUser from './pages/users/InfoUser';
 import Init from './pages/users/Init';
-import App from './App';
 import CreateCategorie from './pages/categories/CreateCategorie';
 import ListCategories from './pages/categories/ListCategories';
 import UpdateCategorie from './pages/categories/UpdateCategorie';
@@ -27,6 +26,7 @@ import UpdateSpecie from './pages/species/UpdateSpecie';
 import CreateLevel from './pages/levels/CreateLevel';
 import ListLevels from './pages/levels/ListLevels';
 import UpdateLevel from './pages/levels/UpdateLevel';
+import AuthLayout from './layouts/AuthLayout';
 
 const AppRouter = () => {
   return (
@@ -35,7 +35,7 @@ const AppRouter = () => {
           <Route path="/init" element={<Init />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={""} />
-          <Route path="/" element={<App />}>
+          <Route path="/" element={<AuthLayout />}>
             <Route path="/listUsers" element={<ListUsers />} />
             <Route path="/users/update/:username" element={<User />} />
             <Route path="/users/:username" element={<InfoUser />} />
