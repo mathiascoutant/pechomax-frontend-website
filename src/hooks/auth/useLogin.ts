@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import { QueryError } from '../types/query'
-import Payload from '../types/payload'
+import { QueryError } from '../../types/query'
+import Payload from '../../types/payload'
 interface QueryVariables {
   credential: string
   password: string

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
-import { User } from '../types/user'
-import { QueryError } from '../types/query'
+import { User } from '../../types/user'
+import { QueryError } from '../../types/query'
 import axios from 'axios'
 
 type QueryVariables = Partial<User> & { id: string }

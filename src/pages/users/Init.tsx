@@ -1,5 +1,5 @@
 import { SyntheticEvent, useCallback } from 'react'
-import useInit from '../../hooks/useInit'
+import useInit from '../../hooks/auth/useInit'
 import { Navigate } from 'react-router-dom'
 
 const Init: React.FC = () => {

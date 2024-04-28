@@ -1,7 +1,7 @@
 import { SyntheticEvent, useCallback } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
-import useUser from '../../hooks/useUser'
-import useUpdateUser from '../../hooks/useUpdateUser'
+import useUser from '../../hooks/users/useUser'
+import useUpdateUser from '../../hooks/users/useUpdateUser'
 import { useQueryClient } from '@tanstack/react-query'
 import type { User } from '../../types/user'
 

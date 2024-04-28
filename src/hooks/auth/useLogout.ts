@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
-import { QueryError } from '../types/query'
+import { QueryError } from '../../types/query'
 
 type QueryReturn = string
 

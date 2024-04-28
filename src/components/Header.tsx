@@ -1,6 +1,6 @@
 import { Link, Navigate } from 'react-router-dom'
 import { useUserStore } from '../stores/UserStore'
-import useLogout from '../hooks/useLogout'
+import useLogout from '../hooks/auth/useLogout'
 import { SyntheticEvent, useCallback } from 'react'
 
 export default function Header() {

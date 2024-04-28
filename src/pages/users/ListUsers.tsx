@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import useDeleteUser from '../../hooks/useDeleteUser'
-import useUserList from '../../hooks/useUserList'
+import useDeleteUser from '../../hooks/users/useDeleteUser'
+import useUserList from '../../hooks/users/useUserList'
 import { useQueryClient } from '@tanstack/react-query'
 import { User } from '../../types/user'
 

@@ -1,7 +1,7 @@
 import React, { SyntheticEvent, useCallback, useEffect } from 'react'
 import { useUserStore } from '../../stores/UserStore'
 import { Link, Navigate } from 'react-router-dom'
-import useLogin from '../../hooks/useLogin'
+import useLogin from '../../hooks/auth/useLogin'
 
 const Login: React.FC = () => {
   const { username, setUsername } = useUserStore()

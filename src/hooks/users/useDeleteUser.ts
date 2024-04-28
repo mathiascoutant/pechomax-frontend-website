@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import { QueryError } from '../types/query'
+import { QueryError } from '../../types/query'
 import axios from 'axios'
 
 interface QueryReturn {

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import useUser from '../../hooks/useUser'
+import useUser from '../../hooks/users/useUser'
 
 function ListUsers() {
   const { username } = useParams<{ username: string }>()
