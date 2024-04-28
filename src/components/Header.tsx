@@ -1,20 +1,20 @@
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { useUserStore } from '../pages/assets/store';
+import { Link, Navigate } from 'react-router-dom';
+import { useUserStore } from '../stores/UserStore';
+import useLogout from '../hooks/useLogout';
+import { SyntheticEvent, useCallback } from 'react';
 
-function Header() {
+export default function Header() {
   const { username } = useUserStore();
+  const { mutate, isPending, isSuccess, isError } = useLogout()
 
-  const handleLogout = async (event: { preventDefault: () => void; }) => {
+  const handleLogout = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      await axios.get('http://localhost:3000/auth/logout', {
-        withCredentials: true
-      });
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
-  };
+    mutate()
+  }, [])
+
+  if (isSuccess) {
+    return <Navigate to="/login" />
+  }
 
   return (
     <div>
@@ -23,16 +23,15 @@ function Header() {
           <img className='w-20' src="./src/assets/images/logo.png" alt="" />
         </Link>
         <div className='grid grid-cols-2 w-50'>
+          {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}
           <Link className='right-44 top-7 w-fit absolute' to={username ? `/user/update/${username}` : '/'}>
             {username && <p>{username}</p>}
           </Link>
           <form onSubmit={handleLogout}>
-            <button className='right-6 top-7 w-fit absolute'>Déconnexion</button>
+            <button className='right-6 top-7 w-fit absolute' disabled={isPending}>Déconnexion</button>
           </form>
         </div>
       </div>
     </div>
   );
-}
-
-export default Header;
+};
