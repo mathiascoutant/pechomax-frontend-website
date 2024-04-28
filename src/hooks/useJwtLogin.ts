@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import { useUserStore } from "../pages/assets/store";
+import { useUserStore } from "../stores/UserStore";
 import { useEffect } from "react";
 
 export default function useJwtLogin() {
