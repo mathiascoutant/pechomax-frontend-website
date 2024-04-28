@@ -11,6 +11,7 @@ const App: React.FC = () => {
       <Header />
       <NavBar />
       {username && <p>Username: {username}</p>}
+      <Outlet />
     </div>
   );
 }

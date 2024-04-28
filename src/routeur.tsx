@@ -32,35 +32,36 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
         <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="/init" element={<Init />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/logout" element={""} />
-          <Route path="/listUsers" element={<ListUsers />} />
-          <Route path="/users/update/:username" element={<User />} />
-          <Route path="/users/:username" element={<InfoUser />} />
-          <Route path="/listCategories" element={<ListCategories />} />
-          <Route path="/categories/create" element={<CreateCategorie />} />
-          <Route path="/categories/update/:id" element={<UpdateCategorie />} />
-          <Route path="/conversations/create" element={<CreateConversation />} />
-          <Route path="/listConversations" element={<ListConversations />} />
-          <Route path="/conversations/:id" element={<InfoConversations />} />
-          <Route path="/conversations/update/:id" element={<UpdateConversation />} />
-          <Route path="/listmessages" element={<ListMessages />} />
-          <Route path="/messages/create" element={<CreateMessage />} />
-          <Route path="/messages/update/:id" element={< UpdateMessage />} />
-          <Route path="/catches/create" element={< CreateCatch />} />
-          <Route path="/listcatches" element={<ListCatch />} />
-          <Route path="/catches/update/:id" element={< UpdateCatch/>} />
-          <Route path="/locations/create" element={<CreateLocation />} />
-          <Route path="/listLocations" element={<ListLocations />} />
-          <Route path="/locations/update/:id" element={< UpdateLocation />} />
-          <Route path="/species/create" element={<CreateSpecie />} />
-          <Route path="/listSpecies" element={<ListSpecies />} />
-          <Route path="/species/update/:id" element={<UpdateSpecie />} />
-          <Route path="/levels/create" element={< CreateLevel/>} />
-          <Route path="/listlevels" element={< ListLevels/>} />
-          <Route path="/levels/update/:id" element={< UpdateLevel/>} />
+          <Route path="/" element={<App />}>
+            <Route path="/init" element={<Init />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={""} />
+            <Route path="/listUsers" element={<ListUsers />} />
+            <Route path="/users/update/:username" element={<User />} />
+            <Route path="/users/:username" element={<InfoUser />} />
+            <Route path="/listCategories" element={<ListCategories />} />
+            <Route path="/categories/create" element={<CreateCategorie />} />
+            <Route path="/categories/update/:id" element={<UpdateCategorie />} />
+            <Route path="/conversations/create" element={<CreateConversation />} />
+            <Route path="/listConversations" element={<ListConversations />} />
+            <Route path="/conversations/:id" element={<InfoConversations />} />
+            <Route path="/conversations/update/:id" element={<UpdateConversation />} />
+            <Route path="/listmessages" element={<ListMessages />} />
+            <Route path="/messages/create" element={<CreateMessage />} />
+            <Route path="/messages/update/:id" element={< UpdateMessage />} />
+            <Route path="/catches/create" element={< CreateCatch />} />
+            <Route path="/listcatches" element={<ListCatch />} />
+            <Route path="/catches/update/:id" element={< UpdateCatch/>} />
+            <Route path="/locations/create" element={<CreateLocation />} />
+            <Route path="/listLocations" element={<ListLocations />} />
+            <Route path="/locations/update/:id" element={< UpdateLocation />} />
+            <Route path="/species/create" element={<CreateSpecie />} />
+            <Route path="/listSpecies" element={<ListSpecies />} />
+            <Route path="/species/update/:id" element={<UpdateSpecie />} />
+            <Route path="/levels/create" element={< CreateLevel/>} />
+            <Route path="/listlevels" element={< ListLevels/>} />
+            <Route path="/levels/update/:id" element={< UpdateLevel/>} />
+          </Route>
         </Routes>
     </BrowserRouter>
   );
