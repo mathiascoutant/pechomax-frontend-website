@@ -1,3 +1,5 @@
+import Header from '../components/Header'
+import NavBar from '../components/NavBar'
 import useJwtLogin from '../hooks/useJwtLogin'
 import { Link, Outlet } from 'react-router-dom'
 
@@ -20,5 +22,13 @@ export default function AuthLayout() {
     )
   }
 
-  return <Outlet />
+  return (
+    <>
+      <Header />
+      <div className="flex flex-cols-2 w-full">
+        <NavBar />
+        <Outlet />
+      </div>
+    </>
+  )
 }

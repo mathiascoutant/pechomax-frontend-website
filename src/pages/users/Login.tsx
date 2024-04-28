@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { SyntheticEvent, useCallback, useEffect } from 'react'
 import { useUserStore } from '../../stores/UserStore'
 import { Link, Navigate } from 'react-router-dom'
 import useLogin from '../../hooks/useLogin'
@@ -7,7 +7,7 @@ const Login: React.FC = () => {
   const { username, setUsername } = useUserStore()
   const { mutate, isError, isSuccess, data } = useLogin()
 
-  const handleLogin = useCallback(async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = useCallback(async (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const postData = {
@@ -18,9 +18,13 @@ const Login: React.FC = () => {
     mutate(postData)
   }, [])
 
-  if (isSuccess) {
-    setUsername(data.username)
+  useEffect(() => {
+    if (isSuccess) {
+      setUsername(data.username)
+    }
+  }, [isSuccess])
 
+  if (isSuccess) {
     return <Navigate to="/" />
   }
 

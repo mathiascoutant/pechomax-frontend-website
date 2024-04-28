@@ -1,7 +1,7 @@
 import { Route, BrowserRouter, Routes } from 'react-router-dom'
 import Login from './pages/users/Login'
 import ListUsers from './pages/users/ListUsers'
-import User from './pages/users/UpdateUser'
+import UpdateUser from './pages/users/UpdateUser'
 import InfoUser from './pages/users/InfoUser'
 import Init from './pages/users/Init'
 import CreateCategorie from './pages/categories/CreateCategorie'
@@ -37,7 +37,7 @@ const AppRouter = () => {
         <Route path="/logout" element={''} />
         <Route path="/" element={<AuthLayout />}>
           <Route path="/listUsers" element={<ListUsers />} />
-          <Route path="/users/update/:username" element={<User />} />
+          <Route path="/users/update/:username" element={<UpdateUser />} />
           <Route path="/users/:username" element={<InfoUser />} />
           <Route path="/listCategories" element={<ListCategories />} />
           <Route path="/categories/create" element={<CreateCategorie />} />

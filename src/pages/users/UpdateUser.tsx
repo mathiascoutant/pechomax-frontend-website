@@ -1,149 +1,118 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import Header from '../../components/Header'
-import NavBar from '../../components/NavBar'
-import { useUserStore } from '../../stores/UserStore'
-import { useParams } from 'react-router-dom'
+import { SyntheticEvent, useCallback } from 'react'
+import { Navigate, useParams } from 'react-router-dom'
+import useUser from '../../hooks/useUser'
+import useUpdateUser from '../../hooks/useUpdateUser'
+import { useQueryClient } from '@tanstack/react-query'
+import type { User } from '../../types/user'
 
-// Interface décrivant la structure des données utilisateur
-interface UserData {
-  id: string
-  username: string
-  email: string
-  role: string
-  phoneNumber: string | null
-  profilePic: string | null
-  city: string | null
-  region: string | null
-  zipCode: string | null
-  score: number
-  createdAt: string
-  updatedAt: string
-}
-
-function User() {
-  const userData = useUserStore()
+function UpdateUser() {
   const { username } = useParams<{ username: string }>()
-  const [user, setUser] = useState<UserData | null>(null)
+  const queryClient = useQueryClient()
+  const { data: user, isLoading, isSuccess, isError } = useUser(username ?? '')
+  const { mutate, isSuccess: mutationSuccess } = useUpdateUser()
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get<UserData>(`http://localhost:3000/users/${username}`, { withCredentials: true })
-        setUser(response.data)
-      } catch (error) {
-        console.error('Error fetching user:', error)
+  const handleSubmit = useCallback(
+    async (e: SyntheticEvent<HTMLFormElement>) => {
+      e.preventDefault()
+
+      const formData = new FormData(e.currentTarget)
+
+      const putData = {
+        id: user?.id ?? '',
+        username: formData.get('username')?.toString(),
+        email: formData.get('email')?.toString(),
+        password: formData.get('password')?.toString(),
+        role: formData.get('role')?.toString(),
+        phoneNumber: formData.get('phoneNumber')?.toString(),
+        city: formData.get('city')?.toString(),
+        region: formData.get('region')?.toString(),
+        zipCode: formData.get('zipCode')?.toString(),
+        score: Number.isNaN(Number(formData.get('score')?.toString()))
+          ? undefined
+          : Number(formData.get('score')?.toString()),
       }
-    }
 
-    fetchUser()
-  }, [username]) // Ajouter username comme dépendance pour que useEffect soit déclenché à chaque changement du paramètre username
+      mutate(putData)
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+      queryClient.setQueryData(['user', username ?? ''], (old: User) => ({ ...old, ...putData }))
+    },
+    [user]
+  )
 
-    try {
-      // Mettre à jour l'URL pour l'endpoint de mise à jour avec l'ID de l'utilisateur
-      const response = await axios.put(`http://localhost:3000/users/update/${user?.id}`, user, {
-        withCredentials: true,
-      })
-      console.log('User updated:', response.data)
-      // Mettre à jour l'état local de l'utilisateur avec les nouvelles données si la mise à jour est réussie
-      setUser(response.data)
-    } catch (error) {
-      console.error('Error updating user:', error)
-    }
+  if (mutationSuccess) {
+    return <Navigate to="/listUsers" />
   }
 
   return (
     <>
-      <div>
-        <Header />
-        <div className="flex flex-cols-2 w-full">
-          <NavBar />
-          <div className="w-9/12 mx-auto mt-10">
-            <form onSubmit={handleSubmit}>
-              <div className="bg-slate-100 p-3 grid grid-cols-2 gap-20">
-                <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
-                  <div className="w-fit">
-                    <p className="mb-4">Username:</p>
-                    <p className="mb-4">Email:</p>
-                    <p className="mb-4">Téléphone:</p>
-                    <p className="mb-4">Ville:</p>
-                    <p className="mb-4">Région:</p>
-                  </div>
-                  {user && (
-                    <div>
-                      <input
-                        className="mb-4"
-                        type="text"
-                        value={user.username ?? ''}
-                        placeholder="Username"
-                        onChange={(e) => setUser({ ...user, username: e.target.value })}
-                      />
-                      <input
-                        className="mb-4"
-                        type="email"
-                        value={user.email ?? ''}
-                        placeholder="Email"
-                        onChange={(e) => setUser({ ...user, email: e.target.value })}
-                      />
-                      <input
-                        className="mb-4"
-                        type="phone"
-                        value={user.phoneNumber ?? ''}
-                        placeholder="Téléphone"
-                        onChange={(e) => setUser({ ...user, phoneNumber: e.target.value })}
-                      />
-                      <input
-                        className="mb-4"
-                        type="text"
-                        value={user.city ?? ''}
-                        placeholder="Ville"
-                        onChange={(e) => setUser({ ...user, city: e.target.value })}
-                      />
-                      <input
-                        className="mb-4"
-                        type="text"
-                        value={user.region ?? ''}
-                        placeholder="Département"
-                        onChange={(e) => setUser({ ...user, region: e.target.value })}
-                      />
-                    </div>
-                  )}
+      <div className="w-9/12 mx-auto mt-10">
+        {isLoading && <p>Loading...</p>}
+        {isError && <p>Error fetching user</p>}
+        {isSuccess && (
+          <form onSubmit={handleSubmit}>
+            <div className="bg-slate-100 p-3 grid grid-cols-2 gap-20">
+              <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
+                <div className="w-fit">
+                  <p className="mb-4">Username:</p>
+                  <p className="mb-4">Email:</p>
+                  <p className="mb-4">Téléphone:</p>
+                  <p className="mb-4">Ville:</p>
+                  <p className="mb-4">Région:</p>
                 </div>
-                <div className="grid grid-cols-2 bg-white rounded-md w-fit p-2 gap-4">
-                  <div>
-                    <p className="mb-4">Id:</p>
-                    <p className="mb-4">Role:</p>
-                    <p className="mb-4">Création:</p>
-                    <p className="mb-4">Score:</p>
-                    <p className="mb-4">Niveau:</p>
-                  </div>
-                  {user && (
-                    <div>
-                      <input className="mb-4" type="text" value={user.id ?? ''} placeholder="Id" disabled />
-                      <input className="mb-4" type="text" value={user.role ?? ''} placeholder="Admin" disabled />
-                      <p className="mb-4">{user.createdAt}</p>
-                      <input
-                        className="mb-4"
-                        type="text"
-                        value={user.score.toString()}
-                        placeholder="Score"
-                        onChange={(e) => setUser({ ...user, score: parseInt(e.target.value) })}
-                      />
-                      <input className="mb-4" type="text" value={'1'} placeholder="Niveau" disabled />
-                      <button type="submit">Modifier</button>
-                    </div>
-                  )}
+                <div>
+                  <input
+                    className="mb-4"
+                    type="text"
+                    name="username"
+                    defaultValue={user.username}
+                    placeholder="Username"
+                  />
+                  <input className="mb-4" type="email" name="email" defaultValue={user.email} placeholder="Email" />
+                  <input
+                    className="mb-4"
+                    type="phone"
+                    name="phoneNumber"
+                    defaultValue={user.phoneNumber ?? ''}
+                    placeholder="Téléphone"
+                  />
+                  <input className="mb-4" type="text" name="city" defaultValue={user.city ?? ''} placeholder="Ville" />
+                  <input
+                    className="mb-4"
+                    type="text"
+                    name="region"
+                    defaultValue={user.region ?? ''}
+                    placeholder="Département"
+                  />
                 </div>
               </div>
-            </form>
-          </div>
-        </div>
+              <div className="grid grid-cols-2 bg-white rounded-md w-fit p-2 gap-4">
+                <div>
+                  <p className="mb-4">Role:</p>
+                  <p className="mb-4">Création:</p>
+                  <p className="mb-4">Score:</p>
+                  <p className="mb-4">Niveau:</p>
+                </div>
+                <div>
+                  <input
+                    className="mb-4"
+                    type="text"
+                    name="role"
+                    defaultValue={user.role}
+                    placeholder="Role"
+                    disabled
+                  />
+                  <p className="mb-4">{user.createdAt}</p>
+                  <input className="mb-4" type="text" name="score" defaultValue={user.score} placeholder="Score" />
+                  <input className="mb-4" type="text" name="level" defaultValue={'1'} placeholder="Niveau" disabled />
+                  <button type="submit">Modifier</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        )}
       </div>
     </>
   )
 }
 
-export default User
+export default UpdateUser
