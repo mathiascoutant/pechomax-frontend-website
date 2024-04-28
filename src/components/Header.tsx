@@ -4,7 +4,7 @@ import useLogout from '../hooks/useLogout'
 import { SyntheticEvent, useCallback } from 'react'
 
 export default function Header() {
-  const { username } = useUserStore()
+  const { username, setUsername } = useUserStore()
   const { mutate, isPending, isSuccess, isError } = useLogout()
 
   const handleLogout = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
@@ -13,6 +13,8 @@ export default function Header() {
   }, [])
 
   if (isSuccess) {
+    setUsername(null)
+
     return <Navigate to="/login" />
   }
 

@@ -1,32 +1,31 @@
-import React, { useEffect } from 'react'
+import React, { useCallback } from 'react'
 import { useUserStore } from '../../stores/UserStore'
-import axios from 'axios'
-import { useNavigate, Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
+import useLogin from '../../hooks/useLogin'
 
 const Login: React.FC = () => {
-  const navigate = useNavigate()
-  const { username, setUsername } = useUserStore() // Utilisez directement la fonction setUsername
+  const { username, setUsername } = useUserStore()
+  const { mutate, isError, isSuccess, data } = useLogin()
 
-  useEffect(() => {
-    // Vérifier et rediriger automatiquement vers la page d'accueil si un nom d'utilisateur est déjà enregistré
-    if (username) {
-      navigate('/')
-    }
-  }, [username, navigate])
-
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = useCallback(async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    const returnData: { username: string | null; password: string | null } = {
-      username: data.get('username') as string | null,
-      password: data.get('password') as string | null,
+    const formData = new FormData(event.currentTarget)
+    const postData = {
+      credential: formData.get('credential')?.toString() ?? '',
+      password: formData.get('password')?.toString() ?? '',
     }
-    try {
-      await axios.post('http://localhost:3000/auth/login', returnData, { withCredentials: true })
-      setUsername(returnData.username)
-    } catch (error) {
-      console.error('Error:', error)
-    }
+
+    mutate(postData)
+  }, [])
+
+  if (isSuccess) {
+    setUsername(data.username)
+
+    return <Navigate to="/" />
+  }
+
+  if (username) {
+    return <Navigate to="/" />
   }
 
   return (
@@ -44,8 +43,8 @@ const Login: React.FC = () => {
               <input
                 className="border-2 border-black-600 mb-3 w-full pl-2"
                 type="text"
-                name="username"
-                placeholder="Username"
+                name="credential"
+                placeholder="Username or E-mail"
               />
             </div>
             <div>
@@ -62,6 +61,7 @@ const Login: React.FC = () => {
               </button>
             </div>
           </form>
+          {isError && <span className="text-red-800">Une erreur s'est produite, veuillez réessayer</span>}
         </div>
       </div>
     </div>
