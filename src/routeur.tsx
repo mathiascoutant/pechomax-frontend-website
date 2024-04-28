@@ -32,10 +32,10 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
         <Routes>
+          <Route path="/init" element={<Init />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={""} />
           <Route path="/" element={<App />}>
-            <Route path="/init" element={<Init />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/logout" element={""} />
             <Route path="/listUsers" element={<ListUsers />} />
             <Route path="/users/update/:username" element={<User />} />
             <Route path="/users/:username" element={<InfoUser />} />
