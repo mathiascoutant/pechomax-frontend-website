@@ -1,19 +1,25 @@
-import { SyntheticEvent } from 'react'
+import { SyntheticEvent, useCallback } from 'react'
 import useInit from '../../hooks/useInit'
+import { Navigate } from 'react-router-dom'
 
 const Init: React.FC = () => {
-  const { mutate } = useInit()
-  const handleInit = (event: SyntheticEvent<HTMLFormElement>) => {
+  const { mutate, isError, error, isSuccess } = useInit()
+
+  const handleInit = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     const data = new FormData(event.currentTarget)
-    const returnData = {
+    const postData = {
       username: data.get('username')?.toString() ?? '',
       email: data.get('email')?.toString() ?? '',
       password: data.get('password')?.toString() ?? '',
     }
 
-    mutate(returnData)
+    mutate(postData)
+  }, [])
+
+  if (isSuccess) {
+    return <Navigate to="/login" />
   }
 
   return (
@@ -27,6 +33,7 @@ const Init: React.FC = () => {
             <input type="submit" value="S'enregistrer" />
           </form>
         </div>
+        {isError && <span className="text-red-800">{error?.response?.data.message}</span>}
       </div>
     </>
   )
