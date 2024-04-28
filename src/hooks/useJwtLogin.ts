@@ -1,16 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import { useUserStore } from '../stores/UserStore'
 import { useEffect } from 'react'
+import { QueryError } from '../types/query'
+import Payload from '../types/payload'
 
 export default function useJwtLogin() {
-  const { isLoading, data, isSuccess, isError, error } = useQuery<
-    { username: string },
-    AxiosError<{ message: string }>
-  >({
+  const { isLoading, data, isSuccess, isError, error } = useQuery<Payload, QueryError>({
     queryKey: ['jwt-login'],
     queryFn: async () => {
-      const response = await axios.get<{ username: string }>('http://localhost:3000/auth/login', {
+      const response = await axios.get<Payload>('http://localhost:3000/auth/login', {
         withCredentials: true,
       })
       return response.data

@@ -1,11 +1,14 @@
 import { useMutation } from '@tanstack/react-query'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
+import { QueryError } from '../types/query'
+
+type ReturnData = string
 
 export default function useLogout() {
-  return useMutation<string, AxiosError<{ message: string }>>({
+  return useMutation<ReturnData, QueryError>({
     mutationKey: ['logout'],
     mutationFn: async () => {
-      const response = await axios.get<string>('http://localhost:3000/auth/logout', { withCredentials: true })
+      const response = await axios.get<ReturnData>('http://localhost:3000/auth/logout', { withCredentials: true })
 
       return response.data
     },

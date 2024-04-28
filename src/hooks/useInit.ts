@@ -1,15 +1,19 @@
 import { useMutation } from '@tanstack/react-query'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
+import { QueryError } from '../types/query'
+import Payload from '../types/payload'
+
+interface VariablesData {
+  username: string
+  email: string
+  password: string
+}
 
 export default function useInit() {
-  return useMutation<
-    { username: string },
-    AxiosError<{ message: string }>,
-    { username: string; email: string; password: string }
-  >({
+  return useMutation<Payload, QueryError, VariablesData>({
     mutationKey: ['init'],
-    mutationFn: async (postData: { username: string; email: string; password: string }) => {
-      const respone = await axios.post<{ username: string }>('http://localhost:3000/auth/init', postData, {
+    mutationFn: async (postData) => {
+      const respone = await axios.post<Payload>('http://localhost:3000/auth/init', postData, {
         withCredentials: true,
       })
 
