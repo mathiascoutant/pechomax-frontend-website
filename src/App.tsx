@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../src/components/Header';
-import Barre from '../src/components/Barre';
 import { useUserStore } from '../src/pages/assets/store';
+import NavBar from './components/NavBar';
 
 const App: React.FC = () => {
   const { username } = useUserStore();
@@ -9,7 +9,7 @@ const App: React.FC = () => {
   return (
     <div>
       <Header />
-      <Barre />
+      <NavBar />
       {username && <p>Username: {username}</p>}
     </div>
   );

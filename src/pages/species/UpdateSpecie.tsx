@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../../components/Header';
-import Barre from '../../components/Barre';
+import NavBar from '../../components/NavBar';
 import { useUserStore } from '../assets/store';
 import { useParams } from 'react-router-dom';
 
@@ -47,7 +47,7 @@ function UpdateSpecie() {
       <div>
         <Header />
         <div className='flex flex-cols-2 w-full'>
-          <Barre />
+          <NavBar />
           <div className='w-9/12 mx-auto mt-10'>
             <form onSubmit={handleSubmit}>
               <div className='bg-slate-100 p-3 grid grid-cols-1 gap-20'>

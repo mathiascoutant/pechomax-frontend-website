@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../../components/Header';
-import Barre from '../../components/Barre';
+import NavBar from '../../components/NavBar';
 import { useUserStore } from '../assets/store';
 
 interface CatchesData {
@@ -50,7 +50,7 @@ function ListCatche() {
       <div>
         <Header />
         <div className='flex flex-cols-2 w-full'>
-          <Barre />
+          <NavBar />
           <div className='mx-auto mt-10'>
             <div className='bg-slate-100 p-3'>
               {catches.map((catches, index) => (

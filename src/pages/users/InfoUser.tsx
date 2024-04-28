@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../../components/Header';
-import Barre from '../../components/Barre';
+import NavBar from '../../components/NavBar';
 import { useUserStore } from '../assets/store';
 import { useParams } from 'react-router-dom';
 
@@ -44,7 +44,7 @@ function ListUsers() {
     <div>
         <Header />
         <div className='flex flex-cols-2 w-full'>
-            <Barre />
+            <NavBar />
             <div className='mx-auto mt-10'>
                 <div className='bg-slate-100 p-3 grid grid-cols-2 gap-20'>
                     {user && ( // Vérifiez si user est défini avant de le mapper

@@ -1,5 +1,5 @@
 import Header from '../../components/Header';
-import Barre from '../../components/Barre';
+import NavBar from '../../components/NavBar';
 import axios from "axios";
 
 
@@ -27,7 +27,7 @@ const CreateCategorie: React.FC = () => {
         <div>
             <Header />
             <div className='flex flex-cols-2 w-full'>
-            <Barre />
+            <NavBar />
             <div className='mx-auto mt-10'>
                 <form  onSubmit={handleInit}>
                     <input type="text" name="name" placeholder="Name" />
