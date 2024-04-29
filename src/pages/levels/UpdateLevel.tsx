@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import AxosClient from '../../helpers/axios'
 import Header from '../../components/Header'
 import NavBar from '../../components/NavBar'
 import { useUserStore } from '../../stores/UserStore'
@@ -21,7 +21,7 @@ function UpdateLevel() {
   useEffect(() => {
     const fetchid = async () => {
       try {
-        const response = await axios.get<LevelData>(`http://localhost:3000/levels/${id}`, { withCredentials: true })
+        const response = await AxosClient.get<LevelData>(`/levels/${id}`, { withCredentials: true })
         setLevel(response.data)
       } catch (error) {
         console.error('Error fetching level:', error)
@@ -35,7 +35,7 @@ function UpdateLevel() {
 
     try {
       // Mettre à jour l'URL pour l'endpoint de mise à jour avec l'ID de l'utilisateur
-      const response = await axios.put(`http://localhost:3000/levels/update/${levels?.id}`, levels, {
+      const response = await AxosClient.put(`/levels/update/${levels?.id}`, levels, {
         withCredentials: true,
       })
       console.log('Level updated:', response.data)

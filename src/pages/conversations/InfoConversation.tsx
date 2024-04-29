@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import AxosClient from '../../helpers/axios'
 import Header from '../../components/Header'
 import NavBar from '../../components/NavBar'
 import { useUserStore } from '../../stores/UserStore'
@@ -23,7 +23,7 @@ function UpdateConversation() {
   useEffect(() => {
     const fetchConversation = async () => {
       try {
-        const response = await axios.get<ConversationseData>(`http://localhost:3000/conversations/${id}`, {
+        const response = await AxosClient.get<ConversationseData>(`/conversations/${id}`, {
           withCredentials: true,
         })
         setConversations(response.data)
@@ -40,7 +40,7 @@ function UpdateConversation() {
 
     try {
       // Mettre à jour l'URL pour l'endpoint de mise à jour avec l'ID de l'utilisateur
-      const response = await axios.put(`http://localhost:3000/conversations/update/${conversation?.id}`, conversation, {
+      const response = await AxosClient.put(`/conversations/update/${conversation?.id}`, conversation, {
         withCredentials: true,
       })
       console.log('Conversation updated:', response.data)

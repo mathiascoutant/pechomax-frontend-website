@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import AxosClient from '../../helpers/axios'
 import Header from '../../components/Header'
 import NavBar from '../../components/NavBar'
 import { useUserStore } from '../../stores/UserStore'
@@ -24,7 +24,7 @@ function UpdateMessage() {
   useEffect(() => {
     const fetchid = async () => {
       try {
-        const response = await axios.get<LocationData>(`http://localhost:3000/locations/${id}`, {
+        const response = await AxosClient.get<LocationData>(`/locations/${id}`, {
           withCredentials: true,
         })
         setLocation(response.data)
@@ -40,7 +40,7 @@ function UpdateMessage() {
 
     try {
       // Mettre à jour l'URL pour l'endpoint de mise à jour avec l'ID de l'utilisateur
-      const response = await axios.put(`http://localhost:3000/locations/update/${locations?.id}`, locations, {
+      const response = await AxosClient.put(`/locations/update/${locations?.id}`, locations, {
         withCredentials: true,
       })
       console.log('Location updated:', response.data)

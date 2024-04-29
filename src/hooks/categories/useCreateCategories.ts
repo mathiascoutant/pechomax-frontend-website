@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
+import AxosClient from '../../helpers/axios'
 import { QueryError } from '../../types/query'
 import Payload from '../../types/payload'
 
@@ -11,7 +11,7 @@ export default function useCreateCategorie() {
   return useMutation<Payload, QueryError, QueryVariables>({
     mutationKey: ['createcategorie'],
     mutationFn: async (postData) => {
-      const respone = await axios.post<Payload>('http://localhost:3000/categories/create', postData, {
+      const respone = await AxosClient.post<Payload>('/categories/create', postData, {
         withCredentials: true,
       })
 

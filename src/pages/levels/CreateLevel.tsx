@@ -1,6 +1,6 @@
 import Header from '../../components/Header'
 import NavBar from '../../components/NavBar'
-import axios from 'axios'
+import AxosClient from '../../helpers/axios'
 import { useUserStore } from '../../stores/UserStore'
 
 const CreateLevel: React.FC = () => {
@@ -15,7 +15,7 @@ const CreateLevel: React.FC = () => {
       end: Number(data.get('end')) as number | null,
     }
     axios
-      .post('http://localhost:3000/levels/create', returnData, { withCredentials: true })
+      .post('/levels/create', returnData, { withCredentials: true })
       .then((response) => {
         return response.data
       })

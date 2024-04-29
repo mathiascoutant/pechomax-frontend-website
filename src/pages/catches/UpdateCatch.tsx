@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import AxosClient from '../../helpers/axios'
 import Header from '../../components/Header'
 import NavBar from '../../components/NavBar'
 import { useUserStore } from '../../stores/UserStore'
@@ -26,7 +26,7 @@ function UpdateCategorie() {
   useEffect(() => {
     const fetchid = async () => {
       try {
-        const response = await axios.get<CatchsData>(`http://localhost:3000/catches/${id}`, { withCredentials: true })
+        const response = await AxosClient.get<CatchsData>(`/catches/${id}`, { withCredentials: true })
         setCatch(response.data)
       } catch (error) {
         console.error('Error fetching catch:', error)
@@ -40,8 +40,8 @@ function UpdateCategorie() {
 
     try {
       // Mettre à jour l'URL pour l'endpoint de mise à jour avec l'ID de l'utilisateur
-      const response = await axios.put(
-        `http://localhost:3000/catches/update/${catches?.id}`,
+      const response = await AxosClient.put(
+        `/catches/update/${catches?.id}`,
         { ...catches, date: new Date(catches?.date ?? '').toISOString() },
         { withCredentials: true }
       )

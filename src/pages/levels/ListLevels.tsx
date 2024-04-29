@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import AxosClient from '../../helpers/axios'
 import Header from '../../components/Header'
 import NavBar from '../../components/NavBar'
 import { useUserStore } from '../../stores/UserStore'
@@ -20,7 +20,7 @@ function ListLevels() {
   useEffect(() => {
     const fetchLevels = async () => {
       try {
-        const response = await axios.get<LevelData[]>('http://localhost:3000/levels', { withCredentials: true }) // Préciser le type de réponse
+        const response = await AxosClient.get<LevelData[]>('/levels', { withCredentials: true }) // Préciser le type de réponse
         setLevels(response.data)
       } catch (error) {
         console.error('Error fetching levels:', error)
@@ -32,7 +32,7 @@ function ListLevels() {
 
   const handleLevelDelete = async (levelId: string) => {
     try {
-      await axios.delete(`http://localhost:3000/levels/delete/${levelId}`, { withCredentials: true })
+      await AxosClient.delete(`/levels/delete/${levelId}`, { withCredentials: true })
       // Supprimer la catégorie de la liste une fois qu'elle est supprimé avec succès
       setLevels(levels.filter((level) => level.id !== levelId))
       window.location.href = '/listLevels'

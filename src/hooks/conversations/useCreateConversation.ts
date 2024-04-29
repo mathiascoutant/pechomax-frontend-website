@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
+import AxosClient from '../../helpers/axios'
 import { QueryError } from '../../types/query'
 import Payload from '../../types/payload'
 
@@ -11,7 +11,7 @@ export default function useCreateConversation() {
   return useMutation<Payload, QueryError, QueryVariables>({
     mutationKey: ['createConversation'],
     mutationFn: async (postData) => {
-      const respone = await axios.post<Payload>('http://localhost:3000/conversations/create', postData, {
+      const respone = await AxosClient.post<Payload>('/conversations/create', postData, {
         withCredentials: true,
       })
 

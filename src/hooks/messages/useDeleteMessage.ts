@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { QueryError } from '../../types/query'
-import axios from 'axios'
+import AxosClient from '../../helpers/axios'
 
 interface QueryReturn {
   id: string
@@ -14,7 +14,7 @@ export default function useDeleteMessage() {
   return useMutation<QueryReturn, QueryError, QueryVariables>({
     mutationKey: ['deleteMessage'],
     mutationFn: async ({ id }) => {
-      const response = await axios.delete(`http://localhost:3000/messages/delete/${id}`, { withCredentials: true })
+      const response = await AxosClient.delete(`/messages/delete/${id}`, { withCredentials: true })
 
       return response.data
     },

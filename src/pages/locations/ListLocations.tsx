@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import AxosClient from '../../helpers/axios'
 import Header from '../../components/Header'
 import NavBar from '../../components/NavBar'
 import { useUserStore } from '../../stores/UserStore'
@@ -23,7 +23,7 @@ function ListMessages() {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await axios.get<LocationData[]>('http://localhost:3000/locations', { withCredentials: true }) // Préciser le type de réponse
+        const response = await AxosClient.get<LocationData[]>('/locations', { withCredentials: true }) // Préciser le type de réponse
         setLocations(response.data)
       } catch (error) {
         console.error('Error fetching locations:', error)
@@ -35,7 +35,7 @@ function ListMessages() {
 
   const handleLocationDelete = async (locationId: string) => {
     try {
-      await axios.delete(`http://localhost:3000/locations/delete/${locationId}`, { withCredentials: true })
+      await AxosClient.delete(`/locations/delete/${locationId}`, { withCredentials: true })
       // Supprimer la catégorie de la liste une fois qu'elle est supprimé avec succès
       setLocations(locations.filter((location) => location.id !== locationId))
       window.location.href = '/listLocations'

@@ -1,6 +1,6 @@
 import Header from '../../components/Header'
 import NavBar from '../../components/NavBar'
-import axios from 'axios'
+import AxosClient from '../../helpers/axios'
 
 const CreateLocation: React.FC = () => {
   const handleInit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -18,7 +18,7 @@ const CreateLocation: React.FC = () => {
       description: data.get('description') as string | null,
     }
     axios
-      .post('http://localhost:3000/locations/create', returnData, { withCredentials: true })
+      .post('/locations/create', returnData, { withCredentials: true })
       .then((response) => {
         window.location.href = '/listLocations'
         return response.data
