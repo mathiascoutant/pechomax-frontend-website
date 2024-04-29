@@ -1,72 +1,42 @@
-import Header from '../../components/Header'
-import NavBar from '../../components/NavBar'
-import axios from 'axios'
-import { useUserStore } from '../../stores/UserStore'
-import { useEffect, useState } from 'react'
-
-interface ConversationseData {
-  id: string
-  user_id: string
-  title: string
-  category_id: string
-  created_at: string
-  updated_at: string
-}
+import { SyntheticEvent, useCallback} from 'react'
+import { Navigate } from 'react-router-dom'
+import useConversationList from '../../hooks/conversations/useConversationList'
+import useCreateMessage from '../../hooks/messages/useCreateMessage'
 
 const CreateMessage: React.FC = () => {
-  const _ = useUserStore()
-  const [conversation, setConversation] = useState<ConversationseData[]>([]) // Spécifier le type des données ici
+  const { mutate, isError, isSuccess } = useCreateMessage()
+  const { data: conversation, isSuccess: isConversationSuccess } = useConversationList()
 
-  useEffect(() => {
-    const fetchconversations = async () => {
-      try {
-        const response = await axios.get<ConversationseData[]>('http://localhost:3000/conversations', {
-          withCredentials: true,
-        }) // Préciser le type de réponse
-        setConversation(response.data)
-      } catch (error) {
-        console.error('Error fetching conversations:', error)
-      }
-    }
-
-    fetchconversations()
-  }, [])
-  const handleInit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleCreateMessage = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault()
+
     const data = new FormData(event.currentTarget)
-    const returnData: { content: string | null; conversationId: string | null } = {
-      content: data.get('content') as string | null,
-      conversationId: data.get('conversationId') as string | null,
-    }
-    axios
-      .post('http://localhost:3000/messages/create', returnData, { withCredentials: true })
-      .then((response) => {
-        window.location.href = '/listMessages'
-        return response.data
-      })
-      .catch((error) => {
-        return error
-      })
+
+    mutate(data)
+  }, [])
+
+  if (isSuccess) {
+    return <Navigate to="/login" />
   }
 
   return (
     <>
       <div>
-        <Header />
         <div className="flex flex-cols-2 w-full">
-          <NavBar />
           <div className="mx-auto mt-10">
-            <form onSubmit={handleInit}>
-              <input type="text" name="content" placeholder="content" />
-              <select name="conversationId" id="pet-select">
-                {conversation.map((conversation, index) => (
-                  <option key={index} value={conversation.id}>
-                    {conversation.title}
-                  </option>
-                ))}
-              </select>
-              <input type="submit" value="S'enregistrer" />
-            </form>
+              {isError && <p>Error fetching Messages</p>}
+                <form onSubmit={handleCreateMessage}>
+                  <input type="text" name="content" placeholder="Content" />
+                  <select name="conversationId" id="pet-select">
+                  {isConversationSuccess &&
+                    conversation.map((conversation, index) => (
+                      <option key={index} value={conversation.id}>
+                        {conversation.title}
+                      </option>
+                    ))}
+                  </select>
+                  <input type="submit" value="S'enregistrer" />
+              </form>
           </div>
         </div>
       </div>

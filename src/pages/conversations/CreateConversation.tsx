@@ -1,69 +1,46 @@
-import Header from '../../components/Header'
-import NavBar from '../../components/NavBar'
-import axios from 'axios'
-import { useUserStore } from '../../stores/UserStore'
-import { useEffect, useState } from 'react'
-
-interface CategorieData {
-  id: string
-  name: string
-  description: string
-  createdAt: string
-  updatedAt: string
-}
+import { SyntheticEvent, useCallback} from 'react'
+import useCreateConversation from '../../hooks/conversations/useCreateConversation'
+import { Navigate } from 'react-router-dom'
+import useCategorieList from '../../hooks/categories/useCategoriesList'
 
 const CreateConversation: React.FC = () => {
-  const _ = useUserStore()
-  const [categories, setCategories] = useState<CategorieData[]>([]) // Spécifier le type des données ici
+  const { mutate, isError, isSuccess } = useCreateConversation()
+  const { data: categories, isSuccess: isCategorySuccess } = useCategorieList()
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get<CategorieData[]>('http://localhost:3000/categories', { withCredentials: true }) // Préciser le type de réponse
-        setCategories(response.data)
-      } catch (error) {
-        console.error('Error fetching categories:', error)
-      }
-    }
-
-    fetchCategories()
-  }, [])
-  const handleInit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleCreateConversation = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault()
+
     const data = new FormData(event.currentTarget)
-    const returnData: { title: string | null; categoryId: string | null } = {
-      title: data.get('title') as string | null,
-      categoryId: data.get('categoryId') as string | null,
+    const postData = {
+      title: data.get('title')?.toString() ?? '',
+      categoryId: data.get('categoryId')?.toString() ?? '',
     }
-    axios
-      .post('http://localhost:3000/conversations/create', returnData, { withCredentials: true })
-      .then((response) => {
-        window.location.href = '/listConversations'
-        return response.data
-      })
-      .catch((error) => {
-        return error
-      })
+
+    mutate(postData)
+  }, [])
+
+  if (isSuccess) {
+    return <Navigate to="/login" />
   }
 
   return (
     <>
       <div>
-        <Header />
         <div className="flex flex-cols-2 w-full">
-          <NavBar />
           <div className="mx-auto mt-10">
-            <form onSubmit={handleInit}>
-              <input type="text" name="title" placeholder="Title" />
-              <select name="categoryId" id="pet-select">
-                {categories.map((categorie, index) => (
-                  <option key={index} value={categorie.id}>
-                    {categorie.name}
-                  </option>
-                ))}
-              </select>
-              <input type="submit" value="S'enregistrer" />
-            </form>
+              {isError && <p>Error fetching Conversations</p>}
+                <form onSubmit={handleCreateConversation}>
+                  <input type="text" name="title" placeholder="Title" />
+                  <select name="categoryId" id="pet-select">
+                  {isCategorySuccess &&
+                    categories.map((category, index) => (
+                      <option key={index} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                  <input type="submit" value="S'enregistrer" />
+              </form>
           </div>
         </div>
       </div>

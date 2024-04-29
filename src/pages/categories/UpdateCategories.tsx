@@ -1,14 +1,15 @@
 import { SyntheticEvent, useCallback } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
-import useSpecies from '../../hooks/species/useSpecies'
-import useUpdateSpecies from '../../hooks/species/useUpdateSpecies'
-import { Species } from '../../types/species'
-function UpdateSpecies() {
+import useCategorie from '../../hooks/categories/useCategories'
+import useUpdateCategorie from '../../hooks/categories/useUpdateCategories'
+import { Categorie } from '../../types/categorie'
+
+function UpdateCategorie() {
   const queryClient = useQueryClient()
   const { id } = useParams<{ id: string }>()
-  const { data: species, isLoading, isSuccess, isError } = useSpecies(id ?? '')
-  const { mutate, isSuccess: mutationSuccess } = useUpdateSpecies()
+  const { data: categorie, isLoading, isSuccess, isError } = useCategorie(id ?? '')
+  const { mutate, isSuccess: mutationSuccess } = useUpdateCategorie()
 
   const handleSubmit = useCallback(
     async (e: SyntheticEvent<HTMLFormElement>) => {
@@ -17,27 +18,26 @@ function UpdateSpecies() {
       const formData = new FormData(e.currentTarget)
 
       const putData = {
-        id: species?.id ?? '',
+        id: categorie?.id ?? '',
         name: formData.get('name')?.toString(),
-        pointValue: Number(formData.get('pointValue')),
       }
 
       mutate(putData)
 
-      queryClient.setQueryData(['species', species ?? ''], (old: Species) => ({ ...old, ...putData }))
+      queryClient.setQueryData(['categorie', categorie ?? ''], (old: Categorie) => ({ ...old, ...putData }))
     },
-    [species]
+    [categorie]
   )
 
   if (mutationSuccess) {
-    return <Navigate to="/listSpecies" />
+    return <Navigate to="/listCategories" />
   }
 
   return (
     <>
       <div className="w-9/12 mx-auto mt-10">
         {isLoading && <p>Loading...</p>}
-        {isError && <p>Error fetching Species</p>}
+        {isError && <p>Error fetching Categories</p>}
         {isSuccess && (
           <form onSubmit={handleSubmit}>
             <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
@@ -45,23 +45,15 @@ function UpdateSpecies() {
                 <div className="w-fit">
                   <p className="mb-4">Id:</p>
                   <p className="mb-4">Name:</p>
-                  <p className="mb-4">Point Value:</p>
                 </div>
                 <div>
-                  <p className="mb-4">{species.id}</p>
+                  <p className="mb-4">{categorie.id}</p>
                   <input
                     className="mb-4"
                     type="text"
                     name="name"
-                    defaultValue={species.name}
+                    defaultValue={categorie.name}
                     placeholder="Name"
-                  /> <br />
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="pointValue"
-                    defaultValue={species.pointValue}
-                    placeholder="pointValue"
                   />
                 </div>
                 <button>Modifier</button>
@@ -74,4 +66,4 @@ function UpdateSpecies() {
   )
 }
 
-export default UpdateSpecies
+export default UpdateCategorie

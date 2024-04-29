@@ -1,116 +1,74 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import Header from '../../components/Header'
-import NavBar from '../../components/NavBar'
-import { useUserStore } from '../../stores/UserStore'
-import { useParams } from 'react-router-dom'
-
-interface ConversationsData {
-  id: string
-  user_id: string
-  title: string
-  categoryId: string
-  createdAt: string
-  updatedAt: string
-  user: {
-    id: string
-    username: string
-    email: string
-    role: string
-    phoneNumber: string | null
-    profilePic: string | null
-    city: string | null
-    region: string | null
-    zipCode: string | null
-    score: number
-    createdAt: string
-    updatedAt: string
-  }
-}
+import { SyntheticEvent, useCallback } from 'react'
+import { Navigate, useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
+import useConversation from '../../hooks/conversations/useConversation'
+import useUpdateConversation from '../../hooks/conversations/useUpdateConversation'
+import { Conversation } from '../../types/conversation'
 
 function UpdateConversation() {
-  const _ = useUserStore()
+  const queryClient = useQueryClient()
   const { id } = useParams<{ id: string }>()
-  const [conversation, setConversation] = useState<ConversationsData | null>(null)
+  const { data: conversation, isLoading, isSuccess, isError } = useConversation(id ?? '')
+  const { mutate, isSuccess: mutationSuccess } = useUpdateConversation()
 
-  useEffect(() => {
-    const fetchId = async () => {
-      try {
-        const response = await axios.get<ConversationsData>(`http://localhost:3000/conversations/${id}`, {
-          withCredentials: true,
-        })
-        setConversation(response.data)
-      } catch (error) {
-        console.error('Error fetching conversation:', error)
+  const handleSubmit = useCallback(
+    async (e: SyntheticEvent<HTMLFormElement>) => {
+      e.preventDefault()
+
+      const formData = new FormData(e.currentTarget)
+
+      const putData = {
+        id: conversation?.id ?? '',
+        title: formData.get('title')?.toString(),
       }
-    }
 
-    fetchId()
-  }, [id])
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+      mutate(putData)
 
-    try {
-      // Mettre à jour l'URL pour l'endpoint de mise à jour avec l'ID de la conversation
-      const response = await axios.put(`http://localhost:3000/conversations/update/${conversation?.id}`, conversation, {
-        withCredentials: true,
-      })
-      console.log('Conversation updated:', response.data)
-      // Mettre à jour l'état local de la catégorie avec les nouvelles données si la mise à jour est réussie
-      setConversation(response.data)
-      window.location.href = '/listConversations'
-    } catch (error) {
-      console.error('Error updating conversation:', error)
-    }
+      queryClient.setQueryData(['conversation', conversation ?? ''], (old: Conversation) => ({ ...old, ...putData }))
+    },
+    [conversation]
+  )
+
+  if (mutationSuccess) {
+    return <Navigate to="/listConversations" />
   }
 
   return (
     <>
-      <div>
-        <Header />
-        <div className="flex flex-cols-2 w-full">
-          <NavBar />
-          <div className="w-9/12 mx-auto mt-10">
-            <form onSubmit={handleSubmit}>
-              <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
-                <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
-                  <div className="w-fit">
-                    <p className="mb-4">Id:</p>
-                    <p className="mb-4">Username:</p>
-                    <p className="mb-4">Title:</p>
-                    <p className="mb-4">Category Id:</p>
-                    <p className="mb-4">Created At:</p>
-                    <p className="mb-4">Updated At:</p>
-                  </div>
-                  {conversation && (
-                    <div>
-                      <p className="mb-4">{conversation.id ?? ''}</p>
-                      <p className="mb-4">{conversation.user.username ?? ''}</p>
-                      <input
-                        className="mb-4 w-6/12"
-                        type="text"
-                        value={conversation.title ?? ''}
-                        placeholder="title"
-                        onChange={(e) => setConversation({ ...conversation, title: e.target.value })}
-                      />{' '}
-                      <br />
-                      <input
-                        className="mb-4 w-6/12"
-                        type="text"
-                        value={conversation.categoryId ?? ''}
-                        placeholder="category"
-                        onChange={(e) => setConversation({ ...conversation, categoryId: e.target.value })}
-                      />
-                      <p className="mb-4">{conversation.createdAt ?? ''}</p>
-                      <p>{conversation.updatedAt ?? ''}</p>
-                    </div>
-                  )}
-                  <button type="submit">Modifier</button>
+      <div className="w-9/12 mx-auto mt-10">
+        {isLoading && <p>Loading...</p>}
+        {isError && <p>Error fetching Conversations</p>}
+        {isSuccess && (
+          <form onSubmit={handleSubmit}>
+            <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
+              <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
+                <div className="w-fit">
+                  <p className="mb-4">Id:</p>
+                  <p className="mb-4">User:</p>
+                  <p className="mb-4">Title:</p>
+                  <p className="mb-4">Messages:</p>
+                  <p className="mb-4">Date de création:</p>
+                  <p className="mb-4">Date de modification:</p>
                 </div>
+                <div>
+                  <p className="mb-4">{conversation.id}</p>
+                  <p className="mb-4">{conversation.user.username}</p>
+                  <input
+                    className="mb-4"
+                    type="text"
+                    name="title"
+                    defaultValue={conversation.title}
+                    placeholder="Title"
+                  />
+                  <p className="mb-4">{conversation.messages}</p>
+                  <p className="mb-4">{conversation.createdAt}</p>
+                  <p className="mb-4">{conversation.updatedAt}</p>
+                </div>
+                <button>Modifier</button>
               </div>
-            </form>
-          </div>
-        </div>
+            </div>
+          </form>
+        )}
       </div>
     </>
   )

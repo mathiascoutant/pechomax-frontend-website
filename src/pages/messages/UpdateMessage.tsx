@@ -1,97 +1,76 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import Header from '../../components/Header'
-import NavBar from '../../components/NavBar'
-import { useUserStore } from '../../stores/UserStore'
-import { useParams } from 'react-router-dom'
-
-interface MessageData {
-  id: string
-  conversationId: string
-  userId: string
-  content: string
-  pictures: string | null
-  createdAt: string
-  updatedAt: string
-}
+import { SyntheticEvent, useCallback } from 'react'
+import { Navigate, useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
+import useMessage from '../../hooks/messages/useMessage'
+import useUpdateMessage from '../../hooks/messages/useUpdateMessage'
+import { Messages } from '../../types/message'
 
 function UpdateMessage() {
-  const _ = useUserStore()
+  const queryClient = useQueryClient()
   const { id } = useParams<{ id: string }>()
-  const [messages, setMessage] = useState<MessageData | null>(null)
+  const { data: message, isLoading, isSuccess, isError } = useMessage(id ?? '')
+  const { mutate, isSuccess: mutationSuccess } = useUpdateMessage()
 
-  useEffect(() => {
-    const fetchid = async () => {
-      try {
-        const response = await axios.get<MessageData>(`http://localhost:3000/messages/${id}`, { withCredentials: true })
-        setMessage(response.data)
-      } catch (error) {
-        console.error('Error fetching categorie:', error)
+  const handleSubmit = useCallback(
+    async (e: SyntheticEvent<HTMLFormElement>) => {
+      e.preventDefault()
+
+      const formData = new FormData(e.currentTarget)
+
+      const putData = {
+        id: message?.id ?? '',
+        content: formData.get('content')?.toString(),
       }
-    }
 
-    fetchid()
-  }, [id])
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+      mutate(putData)
 
-    try {
-      // Mettre à jour l'URL pour l'endpoint de mise à jour avec l'ID de l'utilisateur
-      const response = await axios.put(`http://localhost:3000/messages/update/${messages?.id}`, messages, {
-        withCredentials: true,
-      })
-      console.log('Message updated:', response.data)
-      // Mettre à jour l'état local de la catégorie avec les nouvelles données si la mise à jour est réussie
-      setMessage(response.data)
-      window.location.href = '/listMessages'
-    } catch (error) {
-      console.error('Error updating message:', error)
-    }
+      queryClient.setQueryData(['message', message ?? ''], (old: Messages) => ({ ...old, ...putData }))
+    },
+    [message]
+  )
+
+  if (mutationSuccess) {
+    return <Navigate to="/listMessages" />
   }
 
   return (
     <>
-      <div>
-        <Header />
-        <div className="flex flex-cols-2 w-full">
-          <NavBar />
-          <div className="w-9/12 mx-auto mt-10">
-            <form onSubmit={handleSubmit}>
-              <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
-                <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
-                  <div className="w-fit">
-                    <p className="mb-4">Id:</p>
-                    <p className="mb-4">UserId:</p>
-                    <p className="mb-4">Content:</p>
-                    <p className="mb-4">ConversationId:</p>
-                    <p className="mb-4">CreatedAt:</p>
-                    <p className="mb-4">UpdatedAt:</p>
-                  </div>
-                  {messages && (
-                    <div>
-                      <p className="mb-4">{messages.id ?? ''}</p>
-                      <p className="mb-4">{messages.userId ?? ''}</p>
-                      <input
-                        className="mb-4"
-                        type="text"
-                        value={messages.content ?? ''}
-                        placeholder="content"
-                        onChange={(e) => setMessage({ ...messages, content: e.target.value })}
-                      />
-                      <p className="mb-4">{messages.conversationId ?? ''}</p>
-                      <p className="mb-4">{messages.createdAt ?? ''}</p>
-                      <p className="mb-4">{messages.updatedAt ?? ''}</p>
-                    </div>
-                  )}
-                  <button type="submit">Modifier</button>
+      <div className="w-9/12 mx-auto mt-10">
+        {isLoading && <p>Loading...</p>}
+        {isError && <p>Error fetching Messages</p>}
+        {isSuccess && (
+          <form onSubmit={handleSubmit}>
+            <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
+              <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
+                <div className="w-fit">
+                  <p className="mb-4">Id:</p>
+                  <p className="mb-4">Content:</p>
+                  <p className="mb-4">UserId:</p>
+                  <p className="mb-4">Date de création:</p>
+                  <p className="mb-4">Date de modification:</p>
                 </div>
+                <div>
+                  <p className="mb-4">{message.id}</p>
+                  <input
+                    className="mb-4"
+                    type="text"
+                    name="content"
+                    defaultValue={message.content}
+                    placeholder="Content"
+                  />
+                  <p className="mb-4">{message.userId}</p>
+                  <p className="mb-4">{message.createdAt}</p>
+                  <p className="mb-4">{message.updatedAt}</p>
+                </div>
+                <button>Modifier</button>
               </div>
-            </form>
-          </div>
-        </div>
+            </div>
+          </form>
+        )}
       </div>
     </>
   )
 }
 
 export default UpdateMessage
+
