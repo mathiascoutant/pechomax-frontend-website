@@ -16,31 +16,17 @@ function UpdateUser() {
       e.preventDefault()
 
       const formData = new FormData(e.currentTarget)
+      formData.set('id', user?.id?.toString() ?? '')
 
-      const putData = {
-        id: user?.id ?? '',
-        username: formData.get('username')?.toString(),
-        email: formData.get('email')?.toString(),
-        password: formData.get('password')?.toString(),
-        role: formData.get('role')?.toString(),
-        phoneNumber: formData.get('phoneNumber')?.toString(),
-        city: formData.get('city')?.toString(),
-        region: formData.get('region')?.toString(),
-        zipCode: formData.get('zipCode')?.toString(),
-        score: Number.isNaN(Number(formData.get('score')?.toString()))
-          ? undefined
-          : Number(formData.get('score')?.toString()),
-      }
+      mutate(formData)
 
-      mutate(putData)
-
-      queryClient.setQueryData(['user', username ?? ''], (old: User) => ({ ...old, ...putData }))
+      queryClient.setQueryData(['user', username ?? ''], (old: User) => ({ ...old, ...formData }))
     },
     [user]
   )
 
   if (mutationSuccess) {
-    return <Navigate to="/listUsers" />
+    return <Navigate to="/users" />
   }
 
   return (
@@ -99,7 +85,6 @@ function UpdateUser() {
                     name="role"
                     defaultValue={user.role}
                     placeholder="Role"
-                    disabled
                   />
                   <p className="mb-4">{user.createdAt}</p>
                   <input className="mb-4" type="text" name="score" defaultValue={user.score} placeholder="Score" />

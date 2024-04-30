@@ -30,7 +30,7 @@ function UpdateMessage() {
   )
 
   if (mutationSuccess) {
-    return <Navigate to="/listMessages" />
+    return <Navigate to="/messages" />
   }
 
   return (

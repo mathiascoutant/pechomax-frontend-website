@@ -33,7 +33,7 @@ function UpdateLevel() {
   )
 
   if (mutationSuccess) {
-    return <Navigate to="/listLevels" />
+    return <Navigate to="/levels" />
   }
 
   return (

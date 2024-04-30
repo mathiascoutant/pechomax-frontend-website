@@ -30,7 +30,7 @@ function UpdateCategorie() {
   )
 
   if (mutationSuccess) {
-    return <Navigate to="/listCategories" />
+    return <Navigate to="/categories" />
   }
 
   return (

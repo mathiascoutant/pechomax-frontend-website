@@ -30,7 +30,7 @@ function UpdateSpecies() {
   )
 
   if (mutationSuccess) {
-    return <Navigate to="/listSpecies" />
+    return <Navigate to="/species" />
   }
 
   return (

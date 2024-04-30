@@ -20,7 +20,7 @@ const CreateLevel: React.FC = () => {
   }, [])
 
   if (isSuccess) {
-    return <Navigate to="/listLevels" />
+    return <Navigate to="/levels" />
   }
 
   return (

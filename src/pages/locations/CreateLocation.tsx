@@ -20,7 +20,7 @@ const CreateLocation: React.FC = () => {
   }, [])
 
   if (isSuccess) {
-    return <Navigate to="/listLocations" />
+    return <Navigate to="/locations" />
   }
 
   return (

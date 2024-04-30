@@ -16,18 +16,18 @@ const CreateMessage: React.FC = () => {
   }, [])
 
   if (isSuccess) {
-    return <Navigate to="/listMessages" />
+    return <Navigate to="/messages" />
   }
 
   return (
     <>
-      <div>
-        <div className="flex flex-cols-2 w-full">
-          <div className="mx-auto mt-10">
+      <div className='w-full '>
+        <div className=" w-full">
+          <div className="mt-10 flex items-center justify-center">
               {isError && <p>Error fetching Messages</p>}
-                <form onSubmit={handleCreateMessage}>
-                  <input type="text" name="content" placeholder="Content" />
-                  <select name="conversationId" id="pet-select">
+                <form className="grid grid-cols-1 p-2 m-2 bg-[#aeaeae] text-center" onSubmit={handleCreateMessage}>
+                  <input className='m-2' type="text" name="content" placeholder="Content" />
+                  <select className='m-2' name="conversationId">
                   {isConversationSuccess &&
                     conversation.map((conversation, index) => (
                       <option key={index} value={conversation.id}>

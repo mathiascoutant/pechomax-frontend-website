@@ -16,7 +16,7 @@ const CreateCatches: React.FC = () => {
   }, [])
 
   if (isSuccess) {
-    return <Navigate to="/listCatches" />
+    return <Navigate to="/catches" />
   }
 
   return (

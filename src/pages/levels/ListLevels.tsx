@@ -17,19 +17,24 @@ function ListLevels() {
 
   return (
     <>
-      <div className="flex flex-cols-2 w-full">
+    <div className='w-10 mt-2 ml-2 hover:cursor-pointer '>
+      <a href="/levels/create">
+        <img src="/src/assets/images/plus.png" alt="" />
+      </a>
+    </div>
+      <div className="flex flex-cols-2 w-screen p-2">
         <div className="mx-auto mt-10">
           <div className="bg-slate-100 p-3">
             {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}
             {isSuccess &&
               levelslist.map((level, index) => (
-                <div key={index} className="grid grid-cols-5 gap-4 bg-[#c7f9cc] p-2 mb-4 w-12/12 mx-auto">
+                <div key={index} className="grid grid-cols-4 gap-3 bg-[#c7f9cc] p-2 mb-4 w-12/12 mx-auto">
                   <p>id: {level.id}</p>
                   <p>Title: {level.title}</p>
-                  <a className="text-center" href={`./levels/update/${level.id}`}>
-                    Modifier
+                  <a className="flex items-center justify-center hover:text-[#1f4f42] hover:bg-[#A7C4E4]" href={`./levels/update/${level.id}`}>
+                    <p>Modifier</p>
                   </a>
-                  <button className="text-right hover:bg-red-700 w-fit" onClick={() => handleLevelDelete(level.id)}>
+                  <button className="hover:text-red-700 hover:bg-[#d4f8d7]" onClick={() => handleLevelDelete(level.id)}>
                     Supprimer
                   </button>
                 </div>

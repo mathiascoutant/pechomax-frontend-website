@@ -20,7 +20,7 @@ const CreateConversation: React.FC = () => {
   }, [])
 
   if (isSuccess) {
-    return <Navigate to="/listConversations" />
+    return <Navigate to="/conversations" />
   }
 
   return (

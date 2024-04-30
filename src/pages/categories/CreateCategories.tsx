@@ -17,7 +17,7 @@ const CreateConversation: React.FC = () => {
   }, [])
 
   if (isSuccess) {
-    return <Navigate to="/listCategories" />
+    return <Navigate to="/categories" />
   }
 
   return (

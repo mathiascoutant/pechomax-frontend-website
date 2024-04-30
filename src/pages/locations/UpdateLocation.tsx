@@ -32,7 +32,7 @@ function UpdateLocation() {
   )
 
   if (mutationSuccess) {
-    return <Navigate to="/listLocations" />
+    return <Navigate to="/locations" />
   }
 
   return (

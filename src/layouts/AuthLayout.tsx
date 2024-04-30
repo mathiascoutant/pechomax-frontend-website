@@ -22,10 +22,11 @@ export default function AuthLayout() {
     )
   }
 
+  
   return (
     <>
       <Header />
-      <div className="flex flex-cols-2 w-full">
+      <div className="flex flex-cols-3 w-full">
         <NavBar />
         <Outlet />
       </div>

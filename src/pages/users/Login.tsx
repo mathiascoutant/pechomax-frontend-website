@@ -33,7 +33,7 @@ const Login: React.FC = () => {
   }
 
   return (
-    <div className="bg-[url('./src/assets/images/background-login.jpeg')] flex flex-col h-screen w-screen bg-no-repeat m-0 p-0">
+    <div className="bg-[url('/src/assets/images/background-login.jpeg')] bg-cover flex flex-col h-screen w-screen bg-no-repeat m-0 p-0">
       <div className="w-screen">
         <Link to="/">
           <img className="w-20" src="./src/assets/images/logo.png" alt="" />

@@ -1,12 +1,9 @@
 import { SyntheticEvent, useCallback } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
 import useConversation from '../../hooks/conversations/useConversation'
 import useUpdateConversation from '../../hooks/conversations/useUpdateConversation'
-import { Conversation } from '../../types/conversation'
 
 function UpdateConversation() {
-  const queryClient = useQueryClient()
   const { id } = useParams<{ id: string }>()
   const { data: conversation, isLoading, isSuccess, isError } = useConversation(id ?? '')
   const { mutate, isSuccess: mutationSuccess } = useUpdateConversation()
@@ -24,18 +21,15 @@ function UpdateConversation() {
       }
 
       mutate(putData)
-
-      queryClient.setQueryData(['conversation', conversation ?? ''], (old: Conversation) => ({ ...old, ...putData }))
     },
     [conversation]
   )
 
   if (mutationSuccess) {
-    return <Navigate to="/listConversations" />
+    return <Navigate to="/conversations" />
   }
 
   return (
-    <>
       <div className="w-9/12 mx-auto mt-10">
         {isLoading && <p>Loading...</p>}
         {isError && <p>Error fetching Conversations</p>}
@@ -48,7 +42,6 @@ function UpdateConversation() {
                   <p className="mb-4">User:</p>
                   <p className="mb-4">Title:</p>
                   <p className="mb-4">CategoryId:</p>
-                  <p className="mb-4">Messages:</p>
                   <p className="mb-4">Date de création:</p>
                   <p className="mb-4">Date de modification:</p>
                 </div>
@@ -62,8 +55,7 @@ function UpdateConversation() {
                     defaultValue={conversation.title}
                     placeholder="Title"
                   /> <br />
-                  <input type="text" name="categoryId" placeholder="CategoryId" value={conversation.categoryId} />
-                  <p className="mb-4">{conversation.messages}</p>
+                  <input className="mb-4" type="text" name="categoryId" placeholder="CategoryId" defaultValue={conversation.categoryId} />
                   <p className="mb-4">{conversation.createdAt}</p>
                   <p className="mb-4">{conversation.updatedAt}</p>
                 </div>
@@ -73,7 +65,6 @@ function UpdateConversation() {
           </form>
         )}
       </div>
-    </>
   )
 }
 
