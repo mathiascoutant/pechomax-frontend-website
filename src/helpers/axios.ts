@@ -3,7 +3,7 @@ import axios, { AxiosInstance } from 'axios';
 const AxiosClient = (): AxiosInstance => {
   const axiosClient = axios.create({
     withCredentials: true,
-    baseURL: 'http://172.16.70.190/api',
+    baseURL: import.meta.env.VITE_BACKEND_HOST,
   });
 
   return axiosClient;
