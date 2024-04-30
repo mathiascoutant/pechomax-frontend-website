@@ -1,111 +1,86 @@
-import React, { useState, useEffect } from 'react'
-import AxosClient from '../../helpers/axios'
-import Header from '../../components/Header'
-import NavBar from '../../components/NavBar'
-import { useUserStore } from '../../stores/UserStore'
-import { useParams } from 'react-router-dom'
+import { SyntheticEvent, useCallback } from 'react'
+import { Navigate, useLocation, useParams } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
+import useLocations from '../../hooks/locations/useLocations'
+import useUpdateLocation from '../../hooks/locations/useUpdateLocation'
 
-interface LocationData {
-  id: string
-  longitude: string
-  latitude: string
-  name: string
-  description: string | null
-  userId: string
-  createdAt: string
-  updatedAt: string
-}
-
-function UpdateMessage() {
-  const _ = useUserStore()
+function UpdateLocation() {
+  const queryClient = useQueryClient()
   const { id } = useParams<{ id: string }>()
-  const [locations, setLocation] = useState<LocationData | null>(null)
+  const { data: locations, isLoading, isSuccess, isError } = useLocations(id ?? '')
+  const { mutate, isSuccess: mutationSuccess } = useUpdateLocation()
 
-  useEffect(() => {
-    const fetchid = async () => {
-      try {
-        const response = await AxosClient.get<LocationData>(`/locations/${id}`, {
-          withCredentials: true,
-        })
-        setLocation(response.data)
-      } catch (error) {
-        console.error('Error fetching location:', error)
+  const handleSubmit = useCallback(
+    async (e: SyntheticEvent<HTMLFormElement>) => {
+      e.preventDefault()
+
+      const formData = new FormData(e.currentTarget)
+
+      const putData = {
+        id: locations?.id ?? '',
+        name: formData.get('name')?.toString(),
+        latitude: formData.get('latitude')?.toString(),
+        longitude: formData.get('longitude')?.toString(),
+        description: formData.get('description')?.toString(),
       }
-    }
 
-    fetchid()
-  }, [id])
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+      mutate(putData)
 
-    try {
-      // Mettre à jour l'URL pour l'endpoint de mise à jour avec l'ID de l'utilisateur
-      const response = await AxosClient.put(`/locations/update/${locations?.id}`, locations, {
-        withCredentials: true,
-      })
-      console.log('Location updated:', response.data)
-      // Mettre à jour l'état local de la catégorie avec les nouvelles données si la mise à jour est réussie
-      setLocation(response.data)
-      window.location.href = '/listLocations'
-    } catch (error) {
-      console.error('Error updating location:', error)
-    }
+      queryClient.setQueryData(['locations', locations ?? ''], (old: Location) => ({ ...old, ...putData }))
+    },
+    [locations]
+  )
+
+  if (mutationSuccess) {
+    return <Navigate to="/listLocations" />
   }
 
   return (
     <>
-      <div>
-        <Header />
-        <div className="flex flex-cols-2 w-full">
-          <NavBar />
-          <div className="w-9/12 mx-auto mt-10">
-            <form onSubmit={handleSubmit}>
-              <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
-                <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
-                  <div className="w-fit">
-                    <p className="mb-4">Id:</p>
-                    <p className="mb-4">Longitude:</p>
-                    <p className="mb-4">Latitude:</p>
-                    <p className="mb-4">Name:</p>
-                    <p className="mb-4">Description:</p>
-                    <p className="mb-4">UserId:</p>
-                    <p className="mb-4">CreatedAt:</p>
-                    <p className="mb-4">UpdatedAt:</p>
-                  </div>
-                  {locations && (
-                    <div>
-                      <p className="mb-4">{locations.id ?? ''}</p>
-                      <p className="mb-4">{locations.longitude ?? ''}</p>
-                      <p className="mb-4">{locations.latitude ?? ''}</p>
-                      <input
-                        className="mb-4"
-                        type="text"
-                        value={locations.name ?? ''}
-                        placeholder="name"
-                        onChange={(e) => setLocation({ ...locations, name: e.target.value })}
-                      />{' '}
-                      <br />
-                      <input
-                        className="mb-4"
-                        type="text"
-                        value={locations.description ?? ''}
-                        placeholder="description"
-                        onChange={(e) => setLocation({ ...locations, description: e.target.value })}
-                      />
-                      <p className="mb-4">{locations.userId ?? ''}</p>
-                      <p className="mb-4">{locations.createdAt ?? ''}</p>
-                      <p className="mb-4">{locations.updatedAt ?? ''}</p>
-                    </div>
-                  )}
-                  <button type="submit">Modifier</button>
+      <div className="w-9/12 mx-auto mt-10">
+        {isLoading && <p>Loading...</p>}
+        {isError && <p>Error fetching Locations</p>}
+        {isSuccess && (
+          <form onSubmit={handleSubmit}>
+            <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
+              <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
+                <div className="w-fit">
+                  <p className="mb-4">Id:</p>
+                  <p className="mb-4">Name:</p>
+                  <p className="mb-4">Latitude:</p>
+                  <p className="mb-4">Longitude:</p>
+                  <p className="mb-4">Description:</p>
+                  <p className="mb-4">UserId</p>
+                  <p className="mb-4">Date de creation</p>
+                  <p className="mb-4">Date de modification</p>
                 </div>
+                <div>
+                  <p className="mb-4">{locations.id}</p>
+                  <input
+                    className="mb-4"
+                    type="text"
+                    name="name"
+                    defaultValue={locations.name}
+                    placeholder="Name"
+                  />
+                  <br />
+                  <input className="mb-4" type="text" name="latitude" placeholder="latitude" defaultValue={locations.latitude} />
+                  <br />
+                  <input className="mb-4" type="text" name="longitude" placeholder="longitude" defaultValue={locations.longitude} />
+                  <br />
+                  <input className="mb-4" type="text" name="description" placeholder="description" defaultValue={locations.description} /> <br />
+                  <p className="mb-4">{locations.userId}</p>
+                  <p className="mb-4">{locations.createdAt}</p>
+                  <p className="mb-4">{locations.updatedAt}</p>
+                </div>
+                <button>Modifier</button>
               </div>
-            </form>
-          </div>
-        </div>
+            </div>
+          </form>
+        )}
       </div>
     </>
   )
 }
 
-export default UpdateMessage
+export default UpdateLocation

@@ -1,47 +1,41 @@
-import Header from '../../components/Header'
-import NavBar from '../../components/NavBar'
-import AxosClient from '../../helpers/axios'
+import { SyntheticEvent, useCallback} from 'react'
+import { Navigate } from 'react-router-dom'
+import useCreateLocation from '../../hooks/locations/useCreateLocation'
 
 const CreateLocation: React.FC = () => {
-  const handleInit = (event: React.FormEvent<HTMLFormElement>) => {
+  const { mutate, isError, isSuccess } = useCreateLocation()
+
+  const handleCreateLocation = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault()
+
     const data = new FormData(event.currentTarget)
-    const returnData: {
-      longitude: string | null
-      latitude: string | null
-      name: string | null
-      description: string | null
-    } = {
-      longitude: data.get('longitude') as string | null,
-      latitude: data.get('latitude') as string | null,
-      name: data.get('name') as string | null,
-      description: data.get('description') as string | null,
+    const postData = {
+      name: data.get('name')?.toString() ?? '',
+      latitude:data.get('latitude')?.toString() ?? '',
+      longitude: data.get('longitude')?.toString() ?? '',
+      description: data.get('description')?.toString() ?? '',
     }
-    axios
-      .post('/locations/create', returnData, { withCredentials: true })
-      .then((response) => {
-        window.location.href = '/listLocations'
-        return response.data
-      })
-      .catch((error) => {
-        return error
-      })
+
+    mutate(postData)
+  }, [])
+
+  if (isSuccess) {
+    return <Navigate to="/listLocations" />
   }
 
   return (
     <>
       <div>
-        <Header />
         <div className="flex flex-cols-2 w-full">
-          <NavBar />
           <div className="mx-auto mt-10">
-            <form onSubmit={handleInit}>
-              <input type="text" name="longitude" placeholder="Longitude" />
-              <input type="text" name="latitude" placeholder="Latitude" />
-              <input type="text" name="name" placeholder="Name" />
-              <input type="text" name="description" placeholder="Description" />
-              <input type="submit" value="S'enregistrer" />
-            </form>
+              {isError && <p>Error fetching Location</p>}
+                <form onSubmit={handleCreateLocation}>
+                  <input type="text" name="name" placeholder="Name" />
+                  <input type="text" name='longitude' placeholder="Longitude" />
+                  <input type="text" name='latitude' placeholder="Latitude" />
+                  <input type="text" name='description' placeholder="description" />
+                  <input type="submit" value="S'enregistrer" />
+              </form>
           </div>
         </div>
       </div>

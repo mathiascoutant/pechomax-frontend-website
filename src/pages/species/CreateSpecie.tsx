@@ -18,7 +18,7 @@ const CreateSpecies: React.FC = () => {
   }, [])
 
   if (isSuccess) {
-    return <Navigate to="/login" />
+    return <Navigate to="/listSpecies" />
   }
 
   return (

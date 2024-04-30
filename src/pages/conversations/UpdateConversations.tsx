@@ -20,6 +20,7 @@ function UpdateConversation() {
       const putData = {
         id: conversation?.id ?? '',
         title: formData.get('title')?.toString(),
+        categoryId: formData.get('categoryId')?.toString(),
       }
 
       mutate(putData)
@@ -46,6 +47,7 @@ function UpdateConversation() {
                   <p className="mb-4">Id:</p>
                   <p className="mb-4">User:</p>
                   <p className="mb-4">Title:</p>
+                  <p className="mb-4">CategoryId:</p>
                   <p className="mb-4">Messages:</p>
                   <p className="mb-4">Date de création:</p>
                   <p className="mb-4">Date de modification:</p>
@@ -59,7 +61,8 @@ function UpdateConversation() {
                     name="title"
                     defaultValue={conversation.title}
                     placeholder="Title"
-                  />
+                  /> <br />
+                  <input type="text" name="categoryId" placeholder="CategoryId" value={conversation.categoryId} />
                   <p className="mb-4">{conversation.messages}</p>
                   <p className="mb-4">{conversation.createdAt}</p>
                   <p className="mb-4">{conversation.updatedAt}</p>

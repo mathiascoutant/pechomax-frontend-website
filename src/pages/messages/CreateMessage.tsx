@@ -16,7 +16,7 @@ const CreateMessage: React.FC = () => {
   }, [])
 
   if (isSuccess) {
-    return <Navigate to="/login" />
+    return <Navigate to="/listMessages" />
   }
 
   return (

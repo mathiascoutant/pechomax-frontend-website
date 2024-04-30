@@ -6,4 +6,6 @@ export interface Catches {
     localisation: string
     description: string
     date: string
+    pointValue: number
+    userId: string
   }

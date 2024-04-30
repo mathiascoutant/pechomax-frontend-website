@@ -11,20 +11,12 @@ const CreateCatches: React.FC = () => {
     event.preventDefault()
 
     const data = new FormData(event.currentTarget)
-    const postData = {
-      weight: data.get('weight')?.toString() ?? '',
-      length: data.get('length')?.toString() ?? '',
-      speciesId: data.get('speciesId')?.toString() ?? '',
-      localisation: data.get('localisation')?.toString() ?? '',
-      description: data.get('description')?.toString() ?? '',
-      date : new Date().toISOString()
-    }
 
-    mutate(postData)
+    mutate(data)
   }, [])
 
   if (isSuccess) {
-    return <Navigate to="/login" />
+    return <Navigate to="/listCatches" />
   }
 
   return (
@@ -32,7 +24,7 @@ const CreateCatches: React.FC = () => {
       <div>
         <div className="flex flex-cols-2 w-full">
           <div className="mx-auto mt-10">
-              {isError && <p>Error fetching Conversations</p>}
+              {isError && <p>Error fetching Catches</p>}
                 <form onSubmit={handleCreateCatches}>
                   <input type="text" name="weight" placeholder="weight" />
                   <input type="text" name="length" placeholder="length" />
@@ -46,6 +38,7 @@ const CreateCatches: React.FC = () => {
                   </select>
                   <input type="text" name="localisation" placeholder="localisation" />
                   <input type="text" name="description" placeholder="description" />
+                  <input type="date" name='date' placeholder='date' />
                   <input type="submit" value="S'enregistrer" />
               </form>
           </div>
