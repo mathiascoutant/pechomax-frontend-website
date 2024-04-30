@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import AxosClient from '../../helpers/axios'
 import Header from '../../components/Header'
 import NavBar from '../../components/NavBar'
-import { useUserStore } from '../../stores/UserStore'
 import { useParams } from 'react-router-dom'
 
 // Interface décrivant la structure des données utilisateur
@@ -16,7 +15,6 @@ interface ConversationseData {
 }
 
 function UpdateConversation() {
-  const _ = useUserStore()
   const { id } = useParams<{ id: string }>()
   const [conversation, setConversations] = useState<ConversationseData | null>(null)
 
