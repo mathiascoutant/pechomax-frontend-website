@@ -1,5 +1,5 @@
 import { SyntheticEvent, useCallback } from 'react'
-import { Navigate, useLocation, useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import useLocations from '../../hooks/locations/useLocations'
 import useUpdateLocation from '../../hooks/locations/useUpdateLocation'

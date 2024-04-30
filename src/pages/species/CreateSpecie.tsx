@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom'
 import useCreateSpecies from '../../hooks/species/useCreateSpecies'
 
 const CreateSpecies: React.FC = () => {
-  const { mutate, isError, error, isSuccess } = useCreateSpecies()
+  const { mutate, isSuccess } = useCreateSpecies()
 
   const handleCreateSpecies = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault()

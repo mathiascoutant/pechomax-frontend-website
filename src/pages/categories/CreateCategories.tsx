@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom'
 import useCreateCategorie from '../../hooks/categories/useCreateCategories'
 
 const CreateConversation: React.FC = () => {
-  const { mutate, isError, error, isSuccess } = useCreateCategorie()
+  const { mutate, isSuccess } = useCreateCategorie()
 
   const handleCreateCategorie = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault()

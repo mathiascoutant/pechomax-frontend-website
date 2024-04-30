@@ -4,7 +4,7 @@ import useCreateCatches from '../../hooks/catches/useCreateCatches'
 import useSpeciesList from '../../hooks/species/useSpeciesList'
 
 const CreateCatches: React.FC = () => {
-  const { mutate, isError, error, isSuccess } = useCreateCatches()
+  const { mutate, isError, isSuccess } = useCreateCatches()
   const { data: species, isSuccess: isSpeciesSuccess } = useSpeciesList()
 
   const handleCreateCatches = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
