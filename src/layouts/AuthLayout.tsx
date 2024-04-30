@@ -4,7 +4,7 @@ import useJwtLogin from '../hooks/auth/useJwtLogin'
 import { Link, Outlet } from 'react-router-dom'
 
 export default function AuthLayout() {
-  const { isLoading, isError, error } = useJwtLogin()
+  const { isLoading, isError, error, role } = useJwtLogin()
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -22,6 +22,9 @@ export default function AuthLayout() {
     )
   }
 
+  if (role !== 'Admin') {
+    return <div>Vous n'êtes pas un pécheur suprem !</div>
+  }
   
   return (
     <>

@@ -26,7 +26,7 @@ function UpdateCatches() {
   )
 
   if (mutationSuccess) {
-    return <Navigate to="/listCatches" />
+    return <Navigate to="/catches" />
   }
 
   return (

@@ -29,5 +29,5 @@ export default function useJwtLogin() {
     }
   }, [isLoading])
 
-  return { isSuccess, isError, error, isLoading }
+  return { isSuccess, isError, error, isLoading, role: data?.role }
 }
