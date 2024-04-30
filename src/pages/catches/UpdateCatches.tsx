@@ -51,7 +51,7 @@ function UpdateCatches() {
                 </div>
                 <div>
                   <p className="mb-4">{catches.id}</p>
-                  <p className="mb-4">{catches.date}</p>
+                  <p className="mb-4">{<catches className="date"></catches>}</p>
                   <input
                     className="mb-4"
                     type="text"
