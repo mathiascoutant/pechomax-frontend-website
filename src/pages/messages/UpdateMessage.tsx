@@ -62,7 +62,7 @@ function UpdateMessage() {
                   <p className="mb-4">{message.createdAt}</p>
                   <p className="mb-4">{message.updatedAt}</p>
                 </div>
-                <button>Modifier</button>
+                <button className='bg-[#A7C4E4] w-fit p-1'>Modifier</button>
               </div>
             </div>
           </form>

@@ -67,7 +67,7 @@ function UpdateLevel() {
                   <br />
                   <input className="mb-4" type="number" name="end" placeholder="end" value={levels.end} />
                 </div>
-                <button>Modifier</button>
+                <button className='bg-[#A7C4E4] w-fit p-1'>Modifier</button>
               </div>
             </div>
           </form>

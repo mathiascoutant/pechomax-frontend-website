@@ -73,7 +73,7 @@ function UpdateLocation() {
                   <p className="mb-4">{locations.createdAt}</p>
                   <p className="mb-4">{locations.updatedAt}</p>
                 </div>
-                <button>Modifier</button>
+                <button className='bg-[#A7C4E4] w-fit p-1'>Modifier</button>
               </div>
             </div>
           </form>

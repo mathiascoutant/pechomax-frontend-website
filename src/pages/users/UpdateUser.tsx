@@ -89,9 +89,9 @@ function UpdateUser() {
                   <p className="mb-4">{user.createdAt}</p>
                   <input className="mb-4" type="text" name="score" defaultValue={user.score} placeholder="Score" />
                   <input className="mb-4" type="text" name="level" defaultValue={'1'} placeholder="Niveau" disabled />
-                  <button type="submit">Modifier</button>
                 </div>
               </div>
+              <button className='bg-[#A7C4E4] w-fit p-1' type="submit">Modifier</button>
             </div>
           </form>
         )}

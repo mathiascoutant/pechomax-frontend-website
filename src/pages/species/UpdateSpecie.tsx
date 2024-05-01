@@ -64,7 +64,7 @@ function UpdateSpecies() {
                     placeholder="pointValue"
                   />
                 </div>
-                <button>Modifier</button>
+                <button className='bg-[#A7C4E4] w-fit p-1'>Modifier</button>
               </div>
             </div>
           </form>

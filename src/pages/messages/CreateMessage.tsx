@@ -35,7 +35,7 @@ const CreateMessage: React.FC = () => {
                       </option>
                     ))}
                   </select>
-                  <input type="submit" value="S'enregistrer" />
+                  <input className='bg-[#d4f8d7]' type="submit" value="S'enregistrer" />
               </form>
           </div>
         </div>

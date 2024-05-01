@@ -11,8 +11,8 @@ function ListLevels() {
 
   const handleLevelDelete = useCallback((levelId: string) => {
     mutate({ id: levelId })
-
-    queryClient.setQueryData(['level-list'], (old: Levels[]) => old.filter((level) => level.id !== levelId))
+    console.log ('levelId', levelId)
+    queryClient.setQueryData(['levels-list'], (old: Levels[]) => old.filter((level) => level.id !== levelId))
   }, [])
 
   return (
