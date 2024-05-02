@@ -7,4 +7,4 @@ export interface Location {
   userId: string
   createdAt: string
   updatedAt: string
-  }
+}

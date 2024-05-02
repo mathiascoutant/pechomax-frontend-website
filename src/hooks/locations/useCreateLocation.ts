@@ -10,7 +10,6 @@ interface QueryVariables {
   description: string
 }
 
-
 export default function useCreateLocation() {
   return useMutation<Payload, QueryError, QueryVariables>({
     mutationKey: ['createlocation'],

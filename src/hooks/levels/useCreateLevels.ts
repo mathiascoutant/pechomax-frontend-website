@@ -4,12 +4,11 @@ import { QueryError } from '../../types/query'
 import Payload from '../../types/payload'
 
 interface QueryVariables {
-    title: string
-    value: number
-    start: number
-    end: number
+  title: string
+  value: number
+  start: number
+  end: number
 }
-
 
 export default function useCreateLevels() {
   return useMutation<Payload, QueryError, QueryVariables>({

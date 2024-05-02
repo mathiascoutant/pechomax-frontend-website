@@ -7,7 +7,7 @@ interface QueryReturn {
 }
 
 interface QueryVariables {
-    id: string
+  id: string
 }
 
 export default function useDeleteLevels() {

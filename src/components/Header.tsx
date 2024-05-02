@@ -22,7 +22,7 @@ export default function Header() {
     <div>
       <div className="grid grid-cols-2 h-20 w-full p-0 bg-slate-200 relative">
         <Link to="/">
-          <img className="w-20" src='/src/assets/images/logo.png' alt="" />
+          <img className="w-20" src="/src/assets/images/logo.png" alt="" />
         </Link>
         <div className="grid grid-cols-2 w-50">
           {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}

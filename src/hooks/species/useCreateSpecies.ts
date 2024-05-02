@@ -4,8 +4,8 @@ import { QueryError } from '../../types/query'
 import Payload from '../../types/payload'
 
 interface QueryVariables {
-    name: string
-    pointValue: number
+  name: string
+  pointValue: number
 }
 
 export default function useCreateSpecies() {

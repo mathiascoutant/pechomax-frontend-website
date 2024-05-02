@@ -1,5 +1,5 @@
 export interface Species {
-    id: string
-    name: string
-    pointValue: number
-  }
+  id: string
+  name: string
+  pointValue: number
+}

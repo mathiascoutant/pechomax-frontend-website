@@ -58,42 +58,48 @@ function UpdateCatches() {
                     name="length"
                     defaultValue={catches.length}
                     placeholder="length"
-                  /> <br />
+                  />{' '}
+                  <br />
                   <input
                     className="mb-4"
                     type="text"
                     name="weight"
                     defaultValue={catches.weight}
                     placeholder="Weight"
-                  /> <br />
+                  />{' '}
+                  <br />
                   <input
                     className="mb-4"
                     type="text"
                     name="localisation"
                     defaultValue={catches.localisation}
                     placeholder="Localisation"
-                  /> <br />
+                  />{' '}
+                  <br />
                   <input
                     className="mb-4"
                     type="text"
                     name="description"
                     defaultValue={catches.description}
                     placeholder="Description"
-                  /> <br />
+                  />{' '}
+                  <br />
                   <input
                     className="mb-4"
                     type="text"
                     name="pointValue"
                     defaultValue={catches.pointValue}
                     placeholder="PointValue"
-                  /> <br />
+                  />{' '}
+                  <br />
                   <input
                     className="mb-4"
                     type="text"
                     name="speciesId"
                     defaultValue={catches.speciesId}
                     placeholder="SpeciesId"
-                  /> <br />
+                  />{' '}
+                  <br />
                   <input
                     className="mb-4"
                     type="text"
@@ -102,7 +108,7 @@ function UpdateCatches() {
                     placeholder="UserId"
                   />
                 </div>
-                <button className='bg-[#A7C4E4] w-fit p-1'>Modifier</button>
+                <button className="bg-[#A7C4E4] w-fit p-1">Modifier</button>
               </div>
             </div>
           </form>

@@ -4,7 +4,7 @@ import { QueryError } from '../../types/query'
 import Payload from '../../types/payload'
 
 interface QueryVariables {
-    name: string
+  name: string
 }
 
 export default function useCreateCategorie() {

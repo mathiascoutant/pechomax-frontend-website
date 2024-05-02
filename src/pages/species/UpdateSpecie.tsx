@@ -49,13 +49,8 @@ function UpdateSpecies() {
                 </div>
                 <div>
                   <p className="mb-4">{species.id}</p>
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="name"
-                    defaultValue={species.name}
-                    placeholder="Name"
-                  /> <br />
+                  <input className="mb-4" type="text" name="name" defaultValue={species.name} placeholder="Name" />{' '}
+                  <br />
                   <input
                     className="mb-4"
                     type="text"
@@ -64,7 +59,7 @@ function UpdateSpecies() {
                     placeholder="pointValue"
                   />
                 </div>
-                <button className='bg-[#A7C4E4] w-fit p-1'>Modifier</button>
+                <button className="bg-[#A7C4E4] w-fit p-1">Modifier</button>
               </div>
             </div>
           </form>

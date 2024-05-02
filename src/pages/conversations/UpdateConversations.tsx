@@ -30,41 +30,48 @@ function UpdateConversation() {
   }
 
   return (
-      <div className="w-9/12 mx-auto mt-10">
-        {isLoading && <p>Loading...</p>}
-        {isError && <p>Error fetching Conversations</p>}
-        {isSuccess && (
-          <form onSubmit={handleSubmit}>
-            <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
-              <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
-                <div className="w-fit">
-                  <p className="mb-4">Id:</p>
-                  <p className="mb-4">User:</p>
-                  <p className="mb-4">Title:</p>
-                  <p className="mb-4">CategoryId:</p>
-                  <p className="mb-4">Date de création:</p>
-                  <p className="mb-4">Date de modification:</p>
-                </div>
-                <div>
-                  <p className="mb-4">{conversation.id}</p>
-                  <p className="mb-4">{conversation.user.username}</p>
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="title"
-                    defaultValue={conversation.title}
-                    placeholder="Title"
-                  /> <br />
-                  <input className="mb-4" type="text" name="categoryId" placeholder="CategoryId" defaultValue={conversation.categoryId} />
-                  <p className="mb-4">{conversation.createdAt}</p>
-                  <p className="mb-4">{conversation.updatedAt}</p>
-                </div>
-                <button className='bg-[#A7C4E4] w-fit p-1'>Modifier</button>
+    <div className="w-9/12 mx-auto mt-10">
+      {isLoading && <p>Loading...</p>}
+      {isError && <p>Error fetching Conversations</p>}
+      {isSuccess && (
+        <form onSubmit={handleSubmit}>
+          <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
+            <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
+              <div className="w-fit">
+                <p className="mb-4">Id:</p>
+                <p className="mb-4">User:</p>
+                <p className="mb-4">Title:</p>
+                <p className="mb-4">CategoryId:</p>
+                <p className="mb-4">Date de création:</p>
+                <p className="mb-4">Date de modification:</p>
               </div>
+              <div>
+                <p className="mb-4">{conversation.id}</p>
+                <p className="mb-4">{conversation.user.username}</p>
+                <input
+                  className="mb-4"
+                  type="text"
+                  name="title"
+                  defaultValue={conversation.title}
+                  placeholder="Title"
+                />{' '}
+                <br />
+                <input
+                  className="mb-4"
+                  type="text"
+                  name="categoryId"
+                  placeholder="CategoryId"
+                  defaultValue={conversation.categoryId}
+                />
+                <p className="mb-4">{conversation.createdAt}</p>
+                <p className="mb-4">{conversation.updatedAt}</p>
+              </div>
+              <button className="bg-[#A7C4E4] w-fit p-1">Modifier</button>
             </div>
-          </form>
-        )}
-      </div>
+          </div>
+        </form>
+      )}
+    </div>
   )
 }
 

@@ -4,7 +4,7 @@ import { QueryError } from '../../types/query'
 import Payload from '../../types/payload'
 
 interface QueryVariables {
-    title: string
+  title: string
 }
 
 export default function useCreateConversation() {

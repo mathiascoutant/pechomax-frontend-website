@@ -56,24 +56,37 @@ function UpdateLocation() {
                 </div>
                 <div>
                   <p className="mb-4">{locations.id}</p>
+                  <input className="mb-4" type="text" name="name" defaultValue={locations.name} placeholder="Name" />
+                  <br />
                   <input
                     className="mb-4"
                     type="text"
-                    name="name"
-                    defaultValue={locations.name}
-                    placeholder="Name"
+                    name="latitude"
+                    placeholder="latitude"
+                    defaultValue={locations.latitude}
                   />
                   <br />
-                  <input className="mb-4" type="text" name="latitude" placeholder="latitude" defaultValue={locations.latitude} />
+                  <input
+                    className="mb-4"
+                    type="text"
+                    name="longitude"
+                    placeholder="longitude"
+                    defaultValue={locations.longitude}
+                  />
                   <br />
-                  <input className="mb-4" type="text" name="longitude" placeholder="longitude" defaultValue={locations.longitude} />
+                  <input
+                    className="mb-4"
+                    type="text"
+                    name="description"
+                    placeholder="description"
+                    defaultValue={locations.description}
+                  />{' '}
                   <br />
-                  <input className="mb-4" type="text" name="description" placeholder="description" defaultValue={locations.description} /> <br />
                   <p className="mb-4">{locations.userId}</p>
                   <p className="mb-4">{locations.createdAt}</p>
                   <p className="mb-4">{locations.updatedAt}</p>
                 </div>
-                <button className='bg-[#A7C4E4] w-fit p-1'>Modifier</button>
+                <button className="bg-[#A7C4E4] w-fit p-1">Modifier</button>
               </div>
             </div>
           </form>

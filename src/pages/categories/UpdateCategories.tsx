@@ -48,15 +48,9 @@ function UpdateCategorie() {
                 </div>
                 <div>
                   <p className="mb-4">{categorie.id}</p>
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="name"
-                    defaultValue={categorie.name}
-                    placeholder="Name"
-                  />
+                  <input className="mb-4" type="text" name="name" defaultValue={categorie.name} placeholder="Name" />
                 </div>
-                <button className='bg-[#A7C4E4] w-fit p-1'>Modifier</button>
+                <button className="bg-[#A7C4E4] w-fit p-1">Modifier</button>
               </div>
             </div>
           </form>

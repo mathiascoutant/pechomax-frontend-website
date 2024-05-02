@@ -29,7 +29,10 @@ function ListUsers() {
                   <a className="text-center" href={`./users/${user.username}`}>
                     Voir
                   </a>
-                  <a className="flex items-center justify-center hover:text-[#1f4f42] hover:bg-[#A7C4E4]" href={`./users/update/${user.username}`}>
+                  <a
+                    className="flex items-center justify-center hover:text-[#1f4f42] hover:bg-[#A7C4E4]"
+                    href={`./users/update/${user.username}`}
+                  >
                     <p>Modifier</p>
                   </a>
                   <button className="hover:text-red-700 hover:bg-[#d4f8d7]" onClick={() => handleUserDelete(user.id)}>

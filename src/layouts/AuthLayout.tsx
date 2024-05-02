@@ -25,7 +25,7 @@ export default function AuthLayout() {
   if (role !== 'Admin') {
     return <div>Vous n'êtes pas un pécheur suprem !</div>
   }
-  
+
   return (
     <>
       <Header />
