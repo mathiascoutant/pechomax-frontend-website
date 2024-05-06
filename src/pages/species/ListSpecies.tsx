@@ -38,7 +38,7 @@ function ListSpecies() {
       }
       footer={
         <Link to="/species/create">
-          <Button>Ajouter +</Button>
+          <Button>Créer</Button>
         </Link>
       }
     >

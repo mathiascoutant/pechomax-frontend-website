@@ -5,11 +5,11 @@ import { Location } from '../../types/locations'
 
 type QueryReturn = Location[]
 
-export default function useLocationList() {
+export default function useLocationList(page: number = 1) {
   return useQuery<QueryReturn, QueryError>({
-    queryKey: ['location-list'],
+    queryKey: ['location-list', page],
     queryFn: async () => {
-      const response = await AxosClient.get<QueryReturn>('/locations', { withCredentials: true })
+      const response = await AxosClient.get<QueryReturn>(`/locations?page=${page}`, { withCredentials: true })
 
       return response.data
     },

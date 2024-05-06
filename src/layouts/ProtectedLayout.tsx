@@ -26,9 +26,11 @@ export default function ProtectedLayout() {
   }
 
   return (
-    <div className="grid grid-cols-[min-content_1fr] h-full">
+    <div className="grid grid-cols-[min-content_1fr] h-screen">
       <NavBar />
-      <Outlet />
+      <div className="overflow-y-scroll">
+        <Outlet />
+      </div>
     </div>
   )
 }
