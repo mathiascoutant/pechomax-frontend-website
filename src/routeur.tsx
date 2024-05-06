@@ -25,16 +25,18 @@ import UpdateSpecie from './pages/species/UpdateSpecie'
 import CreateLevel from './pages/levels/CreateLevel'
 import ListLevels from './pages/levels/ListLevels'
 import UpdateLevel from './pages/levels/UpdateLevel'
+import ProtectedLayout from './layouts/ProtectedLayout'
 import AuthLayout from './layouts/AuthLayout'
 
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/init" element={<Init />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={''} />
-        <Route path="/" element={<AuthLayout />}>
+        <Route element={<AuthLayout />}>
+          <Route path="/init" element={<Init />} />
+          <Route path="/login" element={<Login />} />
+        </Route>
+        <Route path="/" element={<ProtectedLayout />}>
           <Route path="/users" element={<ListUsers />} />
           <Route path="/users/update/:username" element={<UpdateUser />} />
           <Route path="/users/:username" element={<InfoUser />} />

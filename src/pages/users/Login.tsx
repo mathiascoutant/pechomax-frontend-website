@@ -1,22 +1,26 @@
-import React, { SyntheticEvent, useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useUserStore } from '../../stores/UserStore'
-import { Link, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import useLogin from '../../hooks/auth/useLogin'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { FormInput } from '../../components/Form/Input'
+import { Button } from '../../components/Form/Button'
+
+interface FormInputs {
+  credential: string
+  password: string
+}
 
 const Login: React.FC = () => {
-  const { username, setUsername } = useUserStore()
-  const { mutate, isError, isSuccess, data } = useLogin()
+  const { setUsername } = useUserStore()
+  const { mutate, isError, isSuccess, isPending, data } = useLogin()
+  const {
+    register,
+    handleSubmit,
+    formState: { isLoading, errors },
+  } = useForm<FormInputs>()
 
-  const handleLogin = useCallback(async (event: SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const postData = {
-      credential: formData.get('credential')?.toString() ?? '',
-      password: formData.get('password')?.toString() ?? '',
-    }
-
-    mutate(postData)
-  }, [])
+  const onSubmit = useCallback<SubmitHandler<FormInputs>>((formDatas) => mutate(formDatas), [])
 
   useEffect(() => {
     if (isSuccess) {
@@ -25,50 +29,34 @@ const Login: React.FC = () => {
   }, [isSuccess])
 
   if (isSuccess) {
-    return <Navigate to="/" />
-  }
-
-  if (username) {
+    setUsername(data.username)
     return <Navigate to="/" />
   }
 
   return (
-    <div className="bg-[url('/src/assets/images/background-login.jpeg')] bg-cover flex flex-col h-screen w-screen bg-no-repeat m-0 p-0">
-      <div className="w-screen">
-        <Link to="/">
-          <img className="w-20" src="./src/assets/images/logo.png" alt="" />
-        </Link>
-      </div>
-      <div className="flex items-center justify-center bg-white max-w-96 w-auto m-auto">
-        <div className="m-auto w-fit p-10">
-          <h2 className="text-black-600 mb-5">Connectez-vous à votre compte</h2>
-          <form onSubmit={handleLogin}>
-            <div>
-              <input
-                className="border-2 border-black-600 mb-3 w-full pl-2"
-                type="text"
-                name="credential"
-                placeholder="Username or E-mail"
-              />
-            </div>
-            <div>
-              <input
-                className="border-2 border-black-600 mb-4 w-full pl-2"
-                type="password"
-                name="password"
-                placeholder="Mot de passe"
-              />
-            </div>
-            <div className="flex justify-center">
-              <button className="bg-[#A7C4E4] pt-1 pb-1 pl-2 pr-2 rounded-md" type="submit">
-                Se connecter
-              </button>
-            </div>
-          </form>
-          {isError && <span className="text-red-800">Une erreur s'est produite, veuillez réessayer</span>}
-        </div>
-      </div>
-    </div>
+    <>
+      <h2>Connectez-vous à votre compte</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center gap-4">
+        <FormInput
+          type="text"
+          label="Nom d'utilisateur ou Email"
+          {...register('credential', { required: true, disabled: isPending || isLoading })}
+        >
+          {errors.credential?.type === 'required' && <p className="text-red-500">Ce champ est requis</p>}
+        </FormInput>
+        <FormInput
+          type="password"
+          label="Mot de passe"
+          {...register('password', { required: true, disabled: isPending || isLoading })}
+        >
+          {errors.password?.type === 'required' && <p className="text-red-500">Ce champ est requis</p>}
+        </FormInput>
+        <Button submit disabled={isPending || isLoading}>
+          Se connecter
+        </Button>
+      </form>
+      {isError && <span className="text-red-800">Une erreur s'est produite, veuillez réessayer</span>}
+    </>
   )
 }
 

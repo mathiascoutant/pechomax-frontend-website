@@ -1,38 +1,14 @@
-import Header from '../components/Header'
-import NavBar from '../components/NavBar'
-import useJwtLogin from '../hooks/auth/useJwtLogin'
 import { Link, Outlet } from 'react-router-dom'
 
-export default function AuthLayout() {
-  const { isLoading, isError, error, role } = useJwtLogin()
-
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-
-  if (isError) {
-    return (
-      <div>
-        <p>There has been an error</p>
-        <p>{error?.response?.data?.message}</p>
-        <Link to="/login" className="text-blue-300">
-          got to login
-        </Link>
-      </div>
-    )
-  }
-
-  if (role !== 'Admin') {
-    return <div>Vous n'êtes pas un pécheur suprem !</div>
-  }
-
+export default function () {
   return (
-    <>
-      <Header />
-      <div className="flex flex-cols-3 w-full">
-        <NavBar />
+    <div className="bg-[url('/src/assets/images/background-login.jpeg')] bg-cover h-screen w-screen flex flex-col justify-center items-center">
+      <Link to="/" className="absolute top-5 left-5">
+        <img className="w-20" src="./src/assets/images/logo.png" alt="Logo Pechomax" />
+      </Link>
+      <div className="bg-white p-10 flex flex-col justify-center items-center gap-4 rounded-md shadow-lg max-w-80">
         <Outlet />
       </div>
-    </>
+    </div>
   )
 }

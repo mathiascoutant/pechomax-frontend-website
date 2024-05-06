@@ -1,22 +1,25 @@
-import { SyntheticEvent, useCallback } from 'react'
+import { useCallback } from 'react'
 import useInit from '../../hooks/auth/useInit'
-import { Link, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { Button } from '../../components/Form/Button'
+import { FormInput } from '../../components/Form/Input'
+
+type FormInputs = {
+  username: string
+  email: string
+  password: string
+}
 
 const Init: React.FC = () => {
-  const { mutate, isError, error, isSuccess } = useInit()
+  const { mutate, isError, error, isSuccess, isPending } = useInit()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isLoading },
+  } = useForm<FormInputs>()
 
-  const handleInit = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    const data = new FormData(event.currentTarget)
-    const postData = {
-      username: data.get('username')?.toString() ?? '',
-      email: data.get('email')?.toString() ?? '',
-      password: data.get('password')?.toString() ?? '',
-    }
-
-    mutate(postData)
-  }, [])
+  const onSubmit = useCallback<SubmitHandler<FormInputs>>((formDatas) => mutate(formDatas), [])
 
   if (isSuccess) {
     return <Navigate to="/login" />
@@ -24,53 +27,37 @@ const Init: React.FC = () => {
 
   return (
     <>
-      <div>
-        <div className="bg-[url('/src/assets/images/background-login.jpeg')] bg-cover flex flex-col h-screen w-screen bg-no-repeat m-0 p-0">
-          <div className="w-screen">
-            <Link to="/">
-              <img className="w-20" src="./src/assets/images/logo.png" alt="" />
-            </Link>
-          </div>
-          <div className="flex items-center justify-center bg-white max-w-96 w-auto m-auto">
-            <div className="m-auto w-fit p-10">
-              <h2 className="text-black-600 mb-5 text-center">Deviens pêcheur !</h2>
-              <form onSubmit={handleInit}>
-                <div>
-                  <input
-                    className="border-2 border-black-600 mb-3 w-full pl-2"
-                    type="text"
-                    name="username"
-                    placeholder="Username"
-                  />
-                </div>
-                <div>
-                  <input
-                    className="border-2 border-black-600 mb-3 w-full pl-2"
-                    type="text"
-                    name="email"
-                    placeholder="E-mail"
-                  />
-                </div>
-                <div>
-                  <input
-                    className="border-2 border-black-600 mb-4 w-full pl-2"
-                    type="password"
-                    name="password"
-                    placeholder="Mot de passe"
-                  />
-                </div>
-                <div className="flex justify-center">
-                  <button className="bg-[#A7C4E4] pt-1 pb-1 pl-2 pr-2 rounded-md" type="submit">
-                    S'inscrire
-                  </button>
-                </div>
-              </form>
-              {isError && <span className="text-red-800">Une erreur s'est produite, veuillez réessayer</span>}
-            </div>
-          </div>
-        </div>
-        {isError && <span className="text-red-800">{error?.response?.data.message}</span>}
-      </div>
+      <h2>Créer un Admin</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center gap-4">
+        <FormInput
+          type="text"
+          label="Username"
+          {...register('username', { required: true, disabled: isPending || isLoading, minLength: 3 })}
+        >
+          {errors.username?.type === 'required' && <p className="text-red-500">Ce champ est requis</p>}
+          {errors.username?.type === 'minLength' && <p className="text-red-500">Minimum 3 caractères</p>}
+        </FormInput>
+        <FormInput
+          type="text"
+          label="E-mail"
+          {...register('email', { required: true, disabled: isPending || isLoading, pattern: /^\S+@\S+\.\S{2,}$/i })}
+        >
+          {errors.email?.type === 'required' && <p className="text-red-500">Ce champ est requis</p>}
+          {errors.email?.type === 'pattern' && <p className="text-red-500">Email non valide</p>}
+        </FormInput>
+        <FormInput
+          type="password"
+          label="Mot de passe"
+          {...register('password', { required: true, disabled: isPending || isLoading, minLength: 8 })}
+        >
+          {errors.password?.type === 'required' && <p className="text-red-500">Ce champ est requis</p>}
+          {errors.password?.type === 'minLength' && <p className="text-red-500">Minimum 8 caractères</p>}
+        </FormInput>
+        <Button submit disabled={isPending || isLoading}>
+          S'inscrire
+        </Button>
+        {isError && <p className="text-red-500">{error.response?.data.message}</p>}
+      </form>
     </>
   )
 }
