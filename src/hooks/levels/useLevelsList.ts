@@ -5,11 +5,11 @@ import { Levels } from '../../types/levels'
 
 type QueryReturn = Levels[]
 
-export default function useLevelsList() {
+export default function useLevelsList(page: number = 1) {
   return useQuery<QueryReturn, QueryError>({
-    queryKey: ['levels-list'],
+    queryKey: ['levels-list', page],
     queryFn: async () => {
-      const response = await AxosClient.get<QueryReturn>('/levels', { withCredentials: true })
+      const response = await AxosClient.get<QueryReturn>(`/levels?page=${page}`, { withCredentials: true })
 
       return response.data
     },

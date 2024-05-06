@@ -1,45 +1,40 @@
-import { SyntheticEvent, useCallback } from 'react'
 import { Navigate } from 'react-router-dom'
 import useCreateLevels from '../../hooks/levels/useCreateLevels'
+import { useForm } from 'react-hook-form'
+import Container from '../../components/Container'
+import { Button } from '../../components/Form/Button'
+import { FormInput } from '../../components/Form/Input'
+
+interface FormInput {
+  title: string
+  value: number
+  start: number
+  end: number
+}
 
 const CreateLevel: React.FC = () => {
-  const { mutate, isError, isSuccess } = useCreateLevels()
+  const { mutate, isSuccess } = useCreateLevels()
+  const { register, handleSubmit } = useForm<FormInput>()
 
-  const handleCreateLevel = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    const data = new FormData(event.currentTarget)
-    const postData = {
-      title: data.get('title')?.toString() ?? '',
-      value: Number(data.get('value')),
-      start: Number(data.get('start')),
-      end: Number(data.get('end')),
-    }
-
-    mutate(postData)
-  }, [])
+  const onSubmit = handleSubmit((datas) => {
+    mutate({ ...datas, end: datas.end > 0 ? datas.end : undefined })
+  })
 
   if (isSuccess) {
     return <Navigate to="/levels" />
   }
 
   return (
-    <>
-      <div className="w-full">
-        <div className="w-full">
-          <div className="mt-10 flex items-center justify-center">
-            {isError && <p>Error fetching Levels</p>}
-            <form className="grid grid-cols-1 p-2 m-2 bg-[#aeaeae] text-center" onSubmit={handleCreateLevel}>
-              <input className="m-2" type="text" name="title" placeholder="Title" />
-              <input className="m-2" type="number" name="Value" placeholder="Value" />
-              <input className="m-2" type="number" name="start" placeholder="Start" />
-              <input className="m-2" type="number" name="end" placeholder="End" />
-              <input className="m-2 bg-[#d4f8d7]" type="submit" value="S'enregistrer" />
-            </form>
-          </div>
-        </div>
-      </div>
-    </>
+    <div className="self-start">
+      <form onSubmit={onSubmit}>
+        <Container footer={<Button submit>Créer</Button>}>
+          <FormInput label="Titre" type="text" {...register('title')}></FormInput>
+          <FormInput label="Valeur" type="number" {...register('value', { valueAsNumber: true })}></FormInput>
+          <FormInput label="Début" type="number" {...register('start', { valueAsNumber: true })}></FormInput>
+          <FormInput label="Fin" type="text" {...register('end', { valueAsNumber: true })}></FormInput>
+        </Container>
+      </form>
+    </div>
   )
 }
 

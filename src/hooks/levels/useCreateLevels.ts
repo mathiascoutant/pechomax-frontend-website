@@ -7,7 +7,7 @@ interface QueryVariables {
   title: string
   value: number
   start: number
-  end: number
+  end?: number
 }
 
 export default function useCreateLevels() {
