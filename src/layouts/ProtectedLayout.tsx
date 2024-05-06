@@ -1,4 +1,3 @@
-import Header from '../components/Header'
 import NavBar from '../components/NavBar'
 import useJwtLogin from '../hooks/auth/useJwtLogin'
 import { Link, Outlet } from 'react-router-dom'
@@ -27,12 +26,9 @@ export default function ProtectedLayout() {
   }
 
   return (
-    <div className="grid grid-rows-[min-content_1fr] h-full">
-      <Header />
-      <div className="grid grid-cols-[min-content_1fr]">
-        <NavBar />
-        <Outlet />
-      </div>
+    <div className="grid grid-cols-[min-content_1fr] h-full">
+      <NavBar />
+      <Outlet />
     </div>
   )
 }

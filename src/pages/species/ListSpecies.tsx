@@ -12,34 +12,34 @@ function ListSpecies() {
     <Container
       header={
         <>
-          <Link to="/species/create">
-            <Button>Ajouter +</Button>
-          </Link>
+          <div className="flex gap-3 items-center">
+            <Button
+              onClick={() =>
+                setSearchParams((prev) => ({
+                  page: Math.max(Number(prev.get('page') ?? '1') - 1, 1).toString(),
+                }))
+              }
+            >
+              {'<'}
+            </Button>
+            <span className="font-bold">{searchParam.get('page') ?? '1'}</span>
+            <Button
+              onClick={() =>
+                setSearchParams((prev) => ({
+                  page: (Number(prev.get('page') ?? '1') + 1).toString(),
+                }))
+              }
+            >
+              {'>'}
+            </Button>
+          </div>
           <SpeciesListItem name="Nom de l'espece" links={false} id="Identifiant" />
         </>
       }
       footer={
-        <div className="flex gap-3 items-center">
-          <Button
-            onClick={() =>
-              setSearchParams((prev) => ({
-                page: Math.max(Number(prev.get('page') ?? '1') - 1, 1).toString(),
-              }))
-            }
-          >
-            {'<'}
-          </Button>
-          <span className="font-bold">{searchParam.get('page') ?? '1'}</span>
-          <Button
-            onClick={() =>
-              setSearchParams((prev) => ({
-                page: (Number(prev.get('page') ?? '1') + 1).toString(),
-              }))
-            }
-          >
-            {'>'}
-          </Button>
-        </div>
+        <Link to="/species/create">
+          <Button>Ajouter +</Button>
+        </Link>
       }
     >
       {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}

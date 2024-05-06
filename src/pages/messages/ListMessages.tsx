@@ -12,34 +12,34 @@ function ListMessages() {
     <Container
       header={
         <>
-          <Link to="/messages/create">
-            <Button>Créer</Button>
-          </Link>
+          <div className="flex gap-3 items-center">
+            <Button
+              onClick={() =>
+                setSearchParams((prev) => ({
+                  page: Math.max(Number(prev.get('page') ?? '1') - 1, 1).toString(),
+                }))
+              }
+            >
+              {'<'}
+            </Button>
+            <span className="font-bold">{searchParam.get('page') ?? '1'}</span>
+            <Button
+              onClick={() =>
+                setSearchParams((prev) => ({
+                  page: (Number(prev.get('page') ?? '1') + 1).toString(),
+                }))
+              }
+            >
+              {'>'}
+            </Button>
+          </div>
           <MessageListItem content="Contenu" id="Identifiant" links={false} />
         </>
       }
       footer={
-        <div className="flex gap-3 items-center">
-          <Button
-            onClick={() =>
-              setSearchParams((prev) => ({
-                page: Math.max(Number(prev.get('page') ?? '1') - 1, 1).toString(),
-              }))
-            }
-          >
-            {'<'}
-          </Button>
-          <span className="font-bold">{searchParam.get('page') ?? '1'}</span>
-          <Button
-            onClick={() =>
-              setSearchParams((prev) => ({
-                page: (Number(prev.get('page') ?? '1') + 1).toString(),
-              }))
-            }
-          >
-            {'>'}
-          </Button>
-        </div>
+        <Link to="/messages/create">
+          <Button>Créer</Button>
+        </Link>
       }
     >
       {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}

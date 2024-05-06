@@ -11,37 +11,37 @@ function ListUsers() {
   return (
     <Container
       header={
-        <UserListItem
-          profilePic=""
-          username="Nom d'utilisateur"
-          email="Adresse email"
-          img={false}
-          links={false}
-          id=""
-        />
-      }
-      footer={
-        <div className="flex gap-3 items-center">
-          <Button
-            onClick={() =>
-              setSearchParams((prev) => ({
-                page: Math.max(Number(prev.get('page') ?? '1') - 1, 1).toString(),
-              }))
-            }
-          >
-            {'<'}
-          </Button>
-          <span className="font-bold">{searchParam.get('page') ?? '1'}</span>
-          <Button
-            onClick={() =>
-              setSearchParams((prev) => ({
-                page: (Number(prev.get('page') ?? '1') + 1).toString(),
-              }))
-            }
-          >
-            {'>'}
-          </Button>
-        </div>
+        <>
+          <div className="flex gap-3 items-center">
+            <Button
+              onClick={() =>
+                setSearchParams((prev) => ({
+                  page: Math.max(Number(prev.get('page') ?? '1') - 1, 1).toString(),
+                }))
+              }
+            >
+              {'<'}
+            </Button>
+            <span className="font-bold">{searchParam.get('page') ?? '1'}</span>
+            <Button
+              onClick={() =>
+                setSearchParams((prev) => ({
+                  page: (Number(prev.get('page') ?? '1') + 1).toString(),
+                }))
+              }
+            >
+              {'>'}
+            </Button>
+          </div>
+          <UserListItem
+            profilePic=""
+            username="Nom d'utilisateur"
+            email="Adresse email"
+            img={false}
+            links={false}
+            id=""
+          />
+        </>
       }
     >
       {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}
