@@ -5,11 +5,11 @@ import AxosClient from '../../helpers/axios'
 
 type QueryReturn = Catches[]
 
-export default function useCatchesList() {
+export default function useCatchesList(page: number = 1) {
   return useQuery<QueryReturn, QueryError>({
-    queryKey: ['catches-list'],
+    queryKey: ['catches-list', page],
     queryFn: async () => {
-      const response = await AxosClient.get<QueryReturn>('/catches', { withCredentials: true })
+      const response = await AxosClient.get<QueryReturn>(`/catches?page=${page}`, { withCredentials: true })
 
       return response.data
     },

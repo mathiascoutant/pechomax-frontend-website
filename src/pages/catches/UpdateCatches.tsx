@@ -1,120 +1,61 @@
-import { SyntheticEvent, useCallback } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
-import { Catches } from '../../types/catches'
 import useCatches from '../../hooks/catches/useCatches'
 import useUpdateCatches from '../../hooks/catches/useUpdateCatches'
+import { useForm } from 'react-hook-form'
+import Container from '../../components/Container'
+import { Button } from '../../components/Form/Button'
+import { FormInput } from '../../components/Form/Input'
+
+interface FormInputs {
+  length: string
+  weight: string
+  description: string
+  pointValue: string
+}
 
 function UpdateCatches() {
-  const queryClient = useQueryClient()
   const { id } = useParams<{ id: string }>()
   const { data: catches, isLoading, isSuccess, isError } = useCatches(id ?? '')
   const { mutate, isSuccess: mutationSuccess } = useUpdateCatches()
-
-  const handleSubmit = useCallback(
-    async (e: SyntheticEvent<HTMLFormElement>) => {
-      e.preventDefault()
-
-      const formData = new FormData(e.currentTarget)
-      formData.set('id', id?.toString() ?? '')
-
-      mutate(formData)
-
-      queryClient.setQueryData(['updateCatches', catches ?? ''], (old: Catches) => ({ ...old, ...formData }))
+  const { register, handleSubmit } = useForm<FormInputs>({
+    values: {
+      length: catches?.length ?? '',
+      weight: catches?.weight ?? '',
+      description: catches?.description ?? '',
+      pointValue: catches?.pointValue.toString() ?? '',
     },
-    [catches]
-  )
+  })
+
+  const onSubmit = handleSubmit((datas) => {
+    const formData = new FormData()
+    if (datas.length) formData.append('length', datas.length)
+    if (datas.weight) formData.append('weight', datas.weight)
+    if (datas.description) formData.append('description', datas.description)
+    if (datas.pointValue) formData.append('pointValue', datas.pointValue)
+    formData.append('id', id ?? '')
+
+    mutate(formData)
+  })
 
   if (mutationSuccess) {
     return <Navigate to="/catches" />
   }
 
   return (
-    <>
-      <div className="w-9/12 mx-auto mt-10">
+    <div className="self-start">
+      <form onSubmit={onSubmit}>
         {isLoading && <p>Loading...</p>}
         {isError && <p>Error fetching Catches</p>}
         {isSuccess && (
-          <form onSubmit={handleSubmit}>
-            <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
-              <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
-                <div className="w-fit">
-                  <p className="mb-4">Id:</p>
-                  <p className="mb-4">Date:</p>
-                  <p className="mb-4">Length:</p>
-                  <p className="mb-4">Weight:</p>
-                  <p className="mb-4">Localisation:</p>
-                  <p className="mb-4">Description:</p>
-                  <p className="mb-4">pointValue:</p>
-                  <p className="mb-4">speciesId</p>
-                  <p className="mb-4">UserId:</p>
-                </div>
-                <div>
-                  <p className="mb-4">{catches.id}</p>
-                  <p className="mb-4">{catches.date}</p>
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="length"
-                    defaultValue={catches.length}
-                    placeholder="length"
-                  />{' '}
-                  <br />
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="weight"
-                    defaultValue={catches.weight}
-                    placeholder="Weight"
-                  />{' '}
-                  <br />
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="localisation"
-                    defaultValue={catches.localisation}
-                    placeholder="Localisation"
-                  />{' '}
-                  <br />
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="description"
-                    defaultValue={catches.description}
-                    placeholder="Description"
-                  />{' '}
-                  <br />
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="pointValue"
-                    defaultValue={catches.pointValue}
-                    placeholder="PointValue"
-                  />{' '}
-                  <br />
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="speciesId"
-                    defaultValue={catches.speciesId}
-                    placeholder="SpeciesId"
-                  />{' '}
-                  <br />
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="userId"
-                    defaultValue={catches.userId}
-                    placeholder="UserId"
-                  />
-                </div>
-                <button className="bg-[#A7C4E4] w-fit p-1">Modifier</button>
-              </div>
-            </div>
-          </form>
+          <Container footer={<Button submit>Enregistrer</Button>}>
+            <FormInput label="Description" type="text" {...register('description')}></FormInput>
+            <FormInput label="Valeur" type="number" {...register('pointValue')}></FormInput>
+            <FormInput label="Taille" type="number" {...register('length')}></FormInput>
+            <FormInput label="Poids" type="text" {...register('weight')}></FormInput>
+          </Container>
         )}
-      </div>
-    </>
+      </form>
+    </div>
   )
 }
 

@@ -1,50 +1,67 @@
-import { SyntheticEvent, useCallback } from 'react'
 import { Navigate } from 'react-router-dom'
 import useCreateCatches from '../../hooks/catches/useCreateCatches'
 import useSpeciesList from '../../hooks/species/useSpeciesList'
+import { useForm } from 'react-hook-form'
+import useLocationList from '../../hooks/locations/useLocationList'
+import Container from '../../components/Container'
+import { Button } from '../../components/Form/Button'
+import { FormInput } from '../../components/Form/Input'
+import { FormSelect } from '../../components/Form/Select'
+
+interface FormInputs {
+  length: string
+  weight: string
+  description: string
+  date: string
+  speciesId: string
+  locationId: string
+}
 
 const CreateCatches: React.FC = () => {
-  const { mutate, isError, isSuccess } = useCreateCatches()
-  const { data: species, isSuccess: isSpeciesSuccess } = useSpeciesList()
+  const { mutate, isSuccess } = useCreateCatches()
+  const { data: species } = useSpeciesList()
+  const { data: locations } = useLocationList()
+  const { register, handleSubmit } = useForm<FormInputs>()
 
-  const handleCreateCatches = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const onSubmit = handleSubmit((datas) => {
+    const formData = new FormData()
+    formData.append('length', datas.length)
+    formData.append('weight', datas.weight)
+    formData.append('description', datas.description)
+    formData.append('date', datas.date)
+    formData.append('speciesId', datas.speciesId)
+    formData.append('locationId', datas.locationId)
 
-    const data = new FormData(event.currentTarget)
-
-    mutate(data)
-  }, [])
+    mutate(formData)
+  })
 
   if (isSuccess) {
     return <Navigate to="/catches" />
   }
 
   return (
-    <>
-      <div className="w-full ">
-        <div className="w-full">
-          <div className="mt-10 flex items-center justify-center">
-            {isError && <p>Error fetching Catches</p>}
-            <form className="grid grid-cols-1 p-2 m-2 bg-[#aeaeae] text-center" onSubmit={handleCreateCatches}>
-              <input className="m-2" type="text" name="weight" placeholder="weight" />
-              <input className="m-2" type="text" name="length" placeholder="length" />
-              <select className="m-2" name="speciesId" id="pet-select">
-                {isSpeciesSuccess &&
-                  species.map((species, index) => (
-                    <option key={index} value={species.id}>
-                      {species.name}
-                    </option>
-                  ))}
-              </select>
-              <input className="m-2" type="text" name="localisation" placeholder="localisation" />
-              <input className="m-2" type="text" name="description" placeholder="description" />
-              <input className="m-2" type="date" name="date" placeholder="date" />
-              <input className="bg-[#d4f8d7] m-2" type="submit" value="S'enregistrer" />
-            </form>
-          </div>
-        </div>
-      </div>
-    </>
+    <div className="self-start">
+      <form onSubmit={onSubmit}>
+        <Container footer={<Button submit>Créer</Button>}>
+          <FormInput type="text" label="Description" {...register('description')}></FormInput>
+          <FormInput type="number" label="Taille" {...register('length')}></FormInput>
+          <FormInput type="number" label="Poids" {...register('weight')}></FormInput>
+          <FormInput type="date" label="Date" {...register('date')}></FormInput>
+          <FormSelect
+            label="Espece"
+            options={species?.map((s) => ({ key: s.name, value: s.id })) ?? []}
+            defaultValue="Choississez une espece"
+            {...register('speciesId')}
+          />
+          <FormSelect
+            label="Localisation"
+            options={locations?.map((l) => ({ key: l.name, value: l.id })) ?? []}
+            defaultValue="Choississez une localisation"
+            {...register('locationId')}
+          />
+        </Container>
+      </form>
+    </div>
   )
 }
 

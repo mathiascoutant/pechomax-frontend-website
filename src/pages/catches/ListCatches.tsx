@@ -1,53 +1,61 @@
-import { useCallback } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
-import { Catches } from '../../types/catches'
 import useCatchesList from '../../hooks/catches/useCatchesList'
-import useDeleteCatches from '../../hooks/catches/useDeleteCatches'
+import Container from '../../components/Container'
+import { Button } from '../../components/Form/Button'
+import { Link, useSearchParams } from 'react-router-dom'
+import { CatchesListItem } from '../../components/CatchesListItem'
 
 function ListCatches() {
-  const queryClient = useQueryClient()
-  const { data: catchesList, isError, isSuccess } = useCatchesList()
-  const { mutate } = useDeleteCatches()
-
-  const handleConversationDelete = useCallback((catchesId: string) => {
-    mutate({ id: catchesId })
-
-    queryClient.setQueryData(['catches-list'], (old: Catches[]) => old.filter((catches) => catches.id !== catchesId))
-  }, [])
+  const [searchParam, setSearchParams] = useSearchParams()
+  const { data: catchesList, isError, isSuccess, isLoading } = useCatchesList(Number(searchParam.get('page') ?? 1))
 
   return (
-    <>
-      <div className="w-10 mt-2 ml-2 hover:cursor-pointer ">
-        <a href="/catches/create">
-          <img src="/src/assets/images/plus.png" alt="" />
-        </a>
-      </div>
-      <div className="flex flex-cols-2 w-screen p-2">
-        <div className="mx-auto mt-10">
-          <div className="bg-slate-100 p-3">
-            {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}
-            {isSuccess &&
-              catchesList.map((catches, index) => (
-                <div key={index} className="grid grid-cols-4 gap-4 bg-[#c7f9cc] p-2 mb-4 w-12/12 mx-auto">
-                  <p>id: {catches.id}</p>
-                  <a
-                    className="flex items-center justify-center hover:text-[#1f4f42] hover:bg-[#A7C4E4]"
-                    href={`./catches/update/${catches.id}`}
-                  >
-                    <p>Modifier</p>
-                  </a>
-                  <button
-                    className="hover:text-red-700 hover:bg-[#d4f8d7]"
-                    onClick={() => handleConversationDelete(catches.id)}
-                  >
-                    Supprimer
-                  </button>
-                </div>
-              ))}
+    <Container
+      header={
+        <>
+          <div className="flex gap-3 items-center">
+            <Button
+              onClick={() =>
+                setSearchParams((prev) => ({
+                  page: Math.max(Number(prev.get('page') ?? '1') - 1, 1).toString(),
+                }))
+              }
+            >
+              {'<'}
+            </Button>
+            <span className="font-bold">{searchParam.get('page') ?? '1'}</span>
+            <Button
+              onClick={() =>
+                setSearchParams((prev) => ({
+                  page: (Number(prev.get('page') ?? '1') + 1).toString(),
+                }))
+              }
+            >
+              {'>'}
+            </Button>
           </div>
-        </div>
-      </div>
-    </>
+          <CatchesListItem id="Identifiant" length="Taille" weight="Poids" pointValue="Valeur" links={false} />
+        </>
+      }
+      footer={
+        <Link to="/catches/create">
+          <Button>Créer</Button>
+        </Link>
+      }
+    >
+      {isLoading && <span>Chargement...</span>}
+      {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}
+      {isSuccess &&
+        catchesList.map((catches, i) => (
+          <CatchesListItem
+            id={catches.id}
+            length={catches.length}
+            weight={catches.weight}
+            pointValue={catches.pointValue}
+            key={catches.id}
+            darker={i % 2 === 0}
+          />
+        ))}
+    </Container>
   )
 }
 
