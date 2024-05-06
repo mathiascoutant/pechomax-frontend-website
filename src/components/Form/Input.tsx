@@ -4,12 +4,28 @@ import { UseFormRegister } from 'react-hook-form'
 interface InputProps {
   label: string
   type: HTMLInputTypeAttribute
+  defaultValue?: string
   children?: React.ReactNode
 }
 
 export const FormInput = forwardRef<HTMLInputElement, InputProps & ReturnType<UseFormRegister<Record<string, string>>>>(
   (
-    { label, type, name, onBlur, onChange, disabled, max, maxLength, min, minLength, pattern, required, children },
+    {
+      label,
+      type,
+      name,
+      onBlur,
+      onChange,
+      disabled,
+      max,
+      maxLength,
+      min,
+      minLength,
+      pattern,
+      required,
+      defaultValue,
+      children,
+    },
     ref
   ) => {
     return (
@@ -30,6 +46,7 @@ export const FormInput = forwardRef<HTMLInputElement, InputProps & ReturnType<Us
             minLength={minLength}
             pattern={pattern}
             required={required}
+            defaultValue={defaultValue}
           />
         </label>
         {children}

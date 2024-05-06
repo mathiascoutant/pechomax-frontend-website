@@ -27,12 +27,12 @@ export default function ProtectedLayout() {
   }
 
   return (
-    <>
+    <div className="grid grid-rows-[min-content_1fr] h-full">
       <Header />
-      <div className="flex h-full">
+      <div className="grid grid-cols-[min-content_1fr]">
         <NavBar />
         <Outlet />
       </div>
-    </>
+    </div>
   )
 }

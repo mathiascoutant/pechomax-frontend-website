@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { QueryError } from '../../types/query'
 import AxosClient from '../../helpers/axios'
 
@@ -11,6 +11,8 @@ interface QueryVariables {
 }
 
 export default function useDeleteUser() {
+  const queryClient = useQueryClient()
+
   return useMutation<QueryReturn, QueryError, QueryVariables>({
     mutationKey: ['deleteUser'],
     mutationFn: async ({ id }) => {
@@ -18,5 +20,6 @@ export default function useDeleteUser() {
 
       return response.data
     },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['user-list'] }),
   })
 }

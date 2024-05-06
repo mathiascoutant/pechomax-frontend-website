@@ -1,98 +1,125 @@
-import { SyntheticEvent, useCallback } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import useUser from '../../hooks/users/useUser'
 import useUpdateUser from '../../hooks/users/useUpdateUser'
-import { useQueryClient } from '@tanstack/react-query'
-import type { User } from '../../types/user'
+import Container from '../../components/Container'
+import { useForm } from 'react-hook-form'
+import { FormInput } from '../../components/Form/Input'
+import { Button } from '../../components/Form/Button'
+
+interface FormInputs {
+  username: string
+  email: string
+  password: string
+  phoneNumber: string
+  city: string
+  region: string
+  role: string
+  score: string
+}
 
 function UpdateUser() {
   const { username } = useParams<{ username: string }>()
-  const queryClient = useQueryClient()
-  const { data: user, isLoading, isSuccess, isError } = useUser(username ?? '')
-  const { mutate, isSuccess: mutationSuccess } = useUpdateUser()
-
-  const handleSubmit = useCallback(
-    async (e: SyntheticEvent<HTMLFormElement>) => {
-      e.preventDefault()
-
-      const formData = new FormData(e.currentTarget)
-      formData.set('id', user?.id?.toString() ?? '')
-
-      mutate(formData)
-
-      queryClient.setQueryData(['user', username ?? ''], (old: User) => ({ ...old, ...formData }))
+  console.log(username)
+  const { data: user, isLoading: userIsLoading, isSuccess, isError } = useUser(username ?? '')
+  const { mutate, isSuccess: mutationSuccess, isPending } = useUpdateUser()
+  const {
+    register,
+    handleSubmit,
+    formState: { isLoading, errors },
+  } = useForm<FormInputs>({
+    values: {
+      city: user?.city ?? '',
+      email: user?.email ?? '',
+      password: '',
+      phoneNumber: user?.phoneNumber ?? '',
+      region: user?.region ?? '',
+      role: user?.role ?? '',
+      score: user?.score.toString() ?? '',
+      username: user?.username ?? '',
     },
-    [user]
-  )
+  })
+
+  const onSubmit = handleSubmit((datas) => {
+    const formData = new FormData()
+    if (datas.username) formData.append('username', datas.username)
+    if (datas.email) formData.append('email', datas.email)
+    if (datas.password) formData.append('password', datas.password)
+    if (datas.phoneNumber) formData.append('phoneNumber', datas.phoneNumber)
+    if (datas.city) formData.append('city', datas.city)
+    if (datas.region) formData.append('region', datas.region)
+    if (datas.role) formData.append('role', datas.role)
+    if (datas.score) formData.append('score', datas.score)
+    formData.append('id', user?.id ?? '')
+
+    mutate(formData)
+  })
 
   if (mutationSuccess) {
     return <Navigate to="/users" />
   }
 
   return (
-    <>
-      <div className="w-9/12 mx-auto mt-10">
-        {isLoading && <p>Loading...</p>}
-        {isError && <p>Error fetching user</p>}
-        {isSuccess && (
-          <form onSubmit={handleSubmit}>
-            <div className="bg-slate-100 p-3 grid grid-cols-2 gap-20">
-              <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
-                <div className="w-fit">
-                  <p className="mb-4">Username:</p>
-                  <p className="mb-4">Email:</p>
-                  <p className="mb-4">Téléphone:</p>
-                  <p className="mb-4">Ville:</p>
-                  <p className="mb-4">Région:</p>
-                </div>
-                <div>
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="username"
-                    defaultValue={user.username}
-                    placeholder="Username"
-                  />
-                  <input className="mb-4" type="email" name="email" defaultValue={user.email} placeholder="Email" />
-                  <input
-                    className="mb-4"
-                    type="phone"
-                    name="phoneNumber"
-                    defaultValue={user.phoneNumber ?? ''}
-                    placeholder="Téléphone"
-                  />
-                  <input className="mb-4" type="text" name="city" defaultValue={user.city ?? ''} placeholder="Ville" />
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="region"
-                    defaultValue={user.region ?? ''}
-                    placeholder="Département"
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 bg-white rounded-md w-fit p-2 gap-4">
-                <div>
-                  <p className="mb-4">Role:</p>
-                  <p className="mb-4">Création:</p>
-                  <p className="mb-4">Score:</p>
-                  <p className="mb-4">Niveau:</p>
-                </div>
-                <div>
-                  <input className="mb-4" type="text" name="role" defaultValue={user.role} placeholder="Role" />
-                  <p className="mb-4">{user.createdAt}</p>
-                  <input className="mb-4" type="text" name="score" defaultValue={user.score} placeholder="Score" />
-                  <input className="mb-4" type="text" name="level" defaultValue={'1'} placeholder="Niveau" disabled />
-                </div>
-              </div>
-              <button className="bg-[#A7C4E4] w-fit p-1" type="submit">
-                Modifier
-              </button>
-            </div>
-          </form>
-        )}
-      </div>
-    </>
+    <div className="self-start">
+      <form onSubmit={onSubmit}>
+        <Container
+          footer={
+            <Button submit disabled={isLoading}>
+              Mettre a Jour
+            </Button>
+          }
+        >
+          {userIsLoading && <span>Chargement...</span>}
+          {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}
+          {isSuccess && (
+            <>
+              <FormInput
+                label="Nom d'utilisateur"
+                type="text"
+                defaultValue={user.username}
+                {...register('username', { minLength: 3, disabled: isLoading || isPending })}
+              ></FormInput>
+              <FormInput
+                label="Addresse email"
+                type="text"
+                {...register('email', { pattern: /^\S+@\S+\.\S{2,}$/i, disabled: isLoading || isPending })}
+              ></FormInput>
+              <FormInput
+                label="Mot de passe"
+                type="password"
+                {...register('password', { minLength: 8, disabled: isLoading || isPending })}
+              >
+                {errors.password?.type === 'minLength' && <p className="text-red-500">Minimum 8 caractères</p>}
+              </FormInput>
+              <FormInput
+                label="Numéro de téléphone"
+                type="text"
+                {...register('phoneNumber', { disabled: isLoading || isPending })}
+              ></FormInput>
+              <FormInput
+                label="Région"
+                type="text"
+                {...register('region', { disabled: isLoading || isPending })}
+              ></FormInput>
+              <FormInput
+                label="Ville"
+                type="text"
+                {...register('city', { disabled: isLoading || isPending })}
+              ></FormInput>
+              <FormInput
+                label="Role"
+                type="text"
+                {...register('role', { disabled: isLoading || isPending })}
+              ></FormInput>
+              <FormInput
+                label="Score"
+                type="number"
+                {...register('score', { valueAsNumber: true, disabled: isLoading || isPending })}
+              ></FormInput>
+            </>
+          )}
+        </Container>
+      </form>
+    </div>
   )
 }
 

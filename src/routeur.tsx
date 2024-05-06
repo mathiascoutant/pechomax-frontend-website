@@ -2,7 +2,6 @@ import { Route, BrowserRouter, Routes } from 'react-router-dom'
 import Login from './pages/users/Login'
 import ListUsers from './pages/users/ListUsers'
 import UpdateUser from './pages/users/UpdateUser'
-import InfoUser from './pages/users/InfoUser'
 import Init from './pages/users/Init'
 import CreateCategorie from './pages/categories/CreateCategories'
 import ListCategories from './pages/categories/ListCategories'
@@ -39,7 +38,6 @@ const AppRouter = () => {
         <Route path="/" element={<ProtectedLayout />}>
           <Route path="/users" element={<ListUsers />} />
           <Route path="/users/update/:username" element={<UpdateUser />} />
-          <Route path="/users/:username" element={<InfoUser />} />
           <Route path="/categories" element={<ListCategories />} />
           <Route path="/categories/create" element={<CreateCategorie />} />
           <Route path="/categories/update/:id" element={<UpdateCategorie />} />
