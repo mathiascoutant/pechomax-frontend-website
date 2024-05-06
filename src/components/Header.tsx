@@ -2,12 +2,13 @@ import { Link, Navigate } from 'react-router-dom'
 import { useUserStore } from '../stores/UserStore'
 import useLogout from '../hooks/auth/useLogout'
 import { SyntheticEvent, useCallback } from 'react'
+import { Button } from './Form/Button'
 
 export default function Header() {
   const { username, setUsername } = useUserStore()
   const { mutate, isPending, isSuccess, isError } = useLogout()
 
-  const handleLogout = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
+  const handleLogout = useCallback((event: SyntheticEvent<HTMLButtonElement>) => {
     event.preventDefault()
     mutate()
   }, [])
@@ -20,20 +21,16 @@ export default function Header() {
 
   return (
     <div>
-      <div className="grid grid-cols-2 h-20 w-full p-0 bg-slate-200 relative">
+      <div className="flex justify-between w-full px-5 py-2 bg-slate-200 relative">
         <Link to="/">
           <img className="w-20" src="/src/assets/images/logo.png" alt="" />
         </Link>
-        <div className="grid grid-cols-2 w-50">
+        <div className="flex items-center gap-4">
           {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}
-          <Link className="right-44 top-7 w-fit absolute" to={username ? `/user/update/${username}` : '/'}>
-            {username && <p>{username}</p>}
-          </Link>
-          <form onSubmit={handleLogout}>
-            <button className="right-6 top-7 w-fit absolute" disabled={isPending}>
-              Déconnexion
-            </button>
-          </form>
+          <span>{username && <p>{username}</p>}</span>
+          <Button disabled={isPending} onClick={handleLogout}>
+            Déconnexion
+          </Button>
         </div>
       </div>
     </div>

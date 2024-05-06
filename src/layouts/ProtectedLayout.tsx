@@ -29,7 +29,7 @@ export default function ProtectedLayout() {
   return (
     <>
       <Header />
-      <div className="flex flex-cols-3 w-max">
+      <div className="flex h-full">
         <NavBar />
         <Outlet />
       </div>
