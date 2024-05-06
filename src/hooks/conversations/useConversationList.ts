@@ -5,11 +5,11 @@ import { Conversation } from '../../types/conversation'
 
 type QueryReturn = Conversation[]
 
-export default function useConversationList() {
+export default function useConversationList(page: number = 1) {
   return useQuery<QueryReturn, QueryError>({
-    queryKey: ['conversation-list'],
+    queryKey: ['conversation-list', page],
     queryFn: async () => {
-      const response = await AxosClient.get<QueryReturn>('/conversations', { withCredentials: true })
+      const response = await AxosClient.get<QueryReturn>(`conversations?page=${page}`, { withCredentials: true })
 
       return response.data
     },

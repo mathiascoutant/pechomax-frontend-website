@@ -1,76 +1,52 @@
-import { SyntheticEvent, useCallback } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import useConversation from '../../hooks/conversations/useConversation'
 import useUpdateConversation from '../../hooks/conversations/useUpdateConversation'
+import { useForm } from 'react-hook-form'
+import { FormInput } from '../../components/Form/Input'
+import { FormSelect } from '../../components/Form/Select'
+import useCategorieList from '../../hooks/categories/useCategoriesList'
+import Container from '../../components/Container'
+import { Button } from '../../components/Form/Button'
+
+interface FormInput {
+  title: string
+  categoryId: string
+}
 
 function UpdateConversation() {
   const { id } = useParams<{ id: string }>()
   const { data: conversation, isLoading, isSuccess, isError } = useConversation(id ?? '')
+  const { data: categories } = useCategorieList()
   const { mutate, isSuccess: mutationSuccess } = useUpdateConversation()
+  const { register, handleSubmit } = useForm<FormInput>({
+    values: { title: conversation?.title ?? '', categoryId: conversation?.categoryId ?? '' },
+  })
 
-  const handleSubmit = useCallback(
-    async (e: SyntheticEvent<HTMLFormElement>) => {
-      e.preventDefault()
-
-      const formData = new FormData(e.currentTarget)
-
-      const putData = {
-        id: conversation?.id ?? '',
-        title: formData.get('title')?.toString(),
-        categoryId: formData.get('categoryId')?.toString(),
-      }
-
-      mutate(putData)
-    },
-    [conversation]
-  )
+  const onSubmit = handleSubmit((datas) => {
+    mutate({ id: conversation?.id ?? '', ...datas })
+  })
 
   if (mutationSuccess) {
     return <Navigate to="/conversations" />
   }
 
   return (
-    <div className="w-9/12 mx-auto mt-10">
-      {isLoading && <p>Loading...</p>}
-      {isError && <p>Error fetching Conversations</p>}
-      {isSuccess && (
-        <form onSubmit={handleSubmit}>
-          <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
-            <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
-              <div className="w-fit">
-                <p className="mb-4">Id:</p>
-                <p className="mb-4">User:</p>
-                <p className="mb-4">Title:</p>
-                <p className="mb-4">CategoryId:</p>
-                <p className="mb-4">Date de création:</p>
-                <p className="mb-4">Date de modification:</p>
-              </div>
-              <div>
-                <p className="mb-4">{conversation.id}</p>
-                <p className="mb-4">{conversation.user.username}</p>
-                <input
-                  className="mb-4"
-                  type="text"
-                  name="title"
-                  defaultValue={conversation.title}
-                  placeholder="Title"
-                />{' '}
-                <br />
-                <input
-                  className="mb-4"
-                  type="text"
-                  name="categoryId"
-                  placeholder="CategoryId"
-                  defaultValue={conversation.categoryId}
-                />
-                <p className="mb-4">{conversation.createdAt}</p>
-                <p className="mb-4">{conversation.updatedAt}</p>
-              </div>
-              <button className="bg-[#A7C4E4] w-fit p-1">Modifier</button>
-            </div>
-          </div>
-        </form>
-      )}
+    <div className="self-start">
+      <form onSubmit={onSubmit}>
+        {isLoading && <span>Chargement...</span>}
+        {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}
+        {isSuccess && (
+          <Container footer={<Button submit>Enregistrer</Button>}>
+            <FormInput label="Titre" type="text" {...register('title')}></FormInput>
+            <FormSelect
+              label="Categorie"
+              options={categories?.map((c) => ({ key: c.name, value: c.id })) ?? []}
+              defaultValue="Choississez une catégorie"
+              {...register('categoryId')}
+            ></FormSelect>
+          </Container>
+        )}
+      </form>
     </div>
   )
 }

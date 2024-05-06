@@ -27,7 +27,9 @@ export const FormSelect = forwardRef<
         >
           <option value="">{defaultValue}</option>
           {options.map((o) => (
-            <option value={o.value}>{o.key}</option>
+            <option value={o.value} key={o.value}>
+              {o.key}
+            </option>
           ))}
         </select>
       </label>

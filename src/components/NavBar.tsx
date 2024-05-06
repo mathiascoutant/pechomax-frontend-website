@@ -1,4 +1,4 @@
-import { SyntheticEvent, useCallback } from 'react'
+import { SyntheticEvent, useCallback, useEffect } from 'react'
 import useLogout from '../hooks/auth/useLogout'
 import { useUserStore } from '../stores/UserStore'
 import NavBarItem from './NavBarItem'
@@ -14,9 +14,13 @@ export default function NavBar() {
     mutate()
   }, [])
 
-  if (isSuccess) {
-    setUsername(null)
+  useEffect(() => {
+    if (isSuccess) {
+      setUsername(null)
+    }
+  }, [])
 
+  if (isSuccess) {
     return <Navigate to="/login" />
   }
   return (

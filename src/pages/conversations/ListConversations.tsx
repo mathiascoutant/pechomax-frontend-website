@@ -1,56 +1,58 @@
-import { useCallback } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
 import useConversationList from '../../hooks/conversations/useConversationList'
-import { Conversation } from '../../types/conversation'
-import useDeleteConversation from '../../hooks/conversations/useDeleteConversation'
+import Container from '../../components/Container'
+import { Link, useSearchParams } from 'react-router-dom'
+import { Button } from '../../components/Form/Button'
+import { ConversationListItem } from '../../components/ConversationListItem'
 
 function ListConversations() {
-  const queryClient = useQueryClient()
-  const { data: conversationList, isError, isSuccess } = useConversationList()
-  const { mutate } = useDeleteConversation()
-
-  const handleConversationDelete = useCallback((conversationId: string) => {
-    mutate({ id: conversationId })
-
-    queryClient.setQueryData(['conversation-list'], (old: Conversation[]) =>
-      old.filter((conversation) => conversation.id !== conversationId)
-    )
-  }, [])
+  const [searchParam, setSearchParams] = useSearchParams()
+  const { data: conversationList, isError, isSuccess } = useConversationList(Number(searchParam.get('page') ?? 1))
 
   return (
-    <>
-      <div className="w-10 mt-2 ml-2 hover:cursor-pointer ">
-        <a href="/conversations/create">
-          <img src="/src/assets/images/plus.png" alt="" />
-        </a>
-      </div>
-      <div className="flex flex-cols-2 w-screen p-2">
-        <div className="mx-auto mt-10">
-          <div className="bg-slate-100 p-3">
-            {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}
-            {isSuccess &&
-              conversationList.map((conversation) => (
-                <div key={conversation.id} className="grid grid-cols-4 gap-4 bg-[#c7f9cc] p-2 mb-4 w-12/12 mx-auto">
-                  <p>id: {conversation.id}</p>
-                  <p>Title: {conversation.title}</p>
-                  <a
-                    className="flex items-center justify-center hover:text-[#1f4f42] hover:bg-[#A7C4E4]"
-                    href={`./conversations/update/${conversation.id}`}
-                  >
-                    <p>Modifier</p>
-                  </a>
-                  <button
-                    className="hover:text-red-700 hover:bg-[#d4f8d7]"
-                    onClick={() => handleConversationDelete(conversation.id)}
-                  >
-                    Supprimer
-                  </button>
-                </div>
-              ))}
+    <Container
+      footer={
+        <Link to="/conversations/create">
+          <Button>Créer</Button>
+        </Link>
+      }
+      header={
+        <>
+          <div className="flex gap-3 items-center">
+            <Button
+              onClick={() =>
+                setSearchParams((prev) => ({
+                  page: Math.max(Number(prev.get('page') ?? '1') - 1, 1).toString(),
+                }))
+              }
+            >
+              {'<'}
+            </Button>
+            <span className="font-bold">{searchParam.get('page') ?? '1'}</span>
+            <Button
+              onClick={() =>
+                setSearchParams((prev) => ({
+                  page: (Number(prev.get('page') ?? '1') + 1).toString(),
+                }))
+              }
+            >
+              {'>'}
+            </Button>
           </div>
-        </div>
-      </div>
-    </>
+          <ConversationListItem id="Identifiant" title="Titre" links={false} />
+        </>
+      }
+    >
+      {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}
+      {isSuccess &&
+        conversationList.map((conversation, i) => (
+          <ConversationListItem
+            id={conversation.id}
+            title={conversation.title}
+            key={conversation.id}
+            darker={i % 2 === 0}
+          />
+        ))}
+    </Container>
   )
 }
 

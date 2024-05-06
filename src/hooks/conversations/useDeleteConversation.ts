@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { QueryError } from '../../types/query'
 import AxosClient from '../../helpers/axios'
 
@@ -11,12 +11,16 @@ interface QueryVariables {
 }
 
 export default function useDeleteConversation() {
+  const queryClient = useQueryClient()
   return useMutation<QueryReturn, QueryError, QueryVariables>({
     mutationKey: ['deleteConversation'],
     mutationFn: async ({ id }) => {
       const response = await AxosClient.delete(`/conversations/delete/${id}`, { withCredentials: true })
 
       return response.data
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['conversation-list'] })
     },
   })
 }
