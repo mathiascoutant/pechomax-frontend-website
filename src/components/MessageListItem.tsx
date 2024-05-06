@@ -1,17 +1,17 @@
 import { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from './Form/Button'
-import useDeleteSpecies from '../hooks/species/useDeleteSpecies'
+import useDeleteMessage from '../hooks/messages/useDeleteMessage'
 
-interface SpeciesListItemProps {
-  name: string
+interface MessageListItemProps {
   id: string
+  content: string
   darker?: boolean
   links?: boolean
 }
 
-export function SpeciesListItem({ name, darker, id, links = true }: SpeciesListItemProps) {
-  const { mutate, isPending } = useDeleteSpecies()
+export function MessageListItem({ id, content, darker, links = true }: MessageListItemProps) {
+  const { mutate, isPending } = useDeleteMessage()
   const handleDelete = useCallback(() => mutate({ id }), [id])
 
   return (
@@ -19,13 +19,13 @@ export function SpeciesListItem({ name, darker, id, links = true }: SpeciesListI
       className={`w-full grid grid-cols-[400px_1fr_min-content_min-content] items-center gap-6 ${darker && 'bg-slate-300'} py-2 px-2`}
     >
       <span>{id}</span>
-      <span>{name}</span>
+      <span className="overflow-ellipsis text-nowrap">{content}</span>
       {links ? (
         <>
-          <Link to={`/species/update/${id}`} aria-disabled={isPending} className="w-min">
+          <Link to={`/messages/update/${id}`} aria-disabled={isPending} className="w-min">
             <Button>Details</Button>
           </Link>
-          <Button onClick={handleDelete} disabled={isPending} className="w-min none">
+          <Button onClick={handleDelete} disabled={isPending} className="w-min">
             Supprimer
           </Button>
         </>

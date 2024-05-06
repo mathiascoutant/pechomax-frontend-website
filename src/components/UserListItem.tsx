@@ -19,7 +19,7 @@ export function UserListItem({ email, profilePic, username, darker, id, links = 
 
   return (
     <div
-      className={`w-full grid grid-cols-[max-content_1fr_1fr_0.5fr_0.5fr] gap-6 ${darker && 'bg-slate-300'} py-2 px-2`}
+      className={`w-full grid grid-cols-[max-content_1fr_1fr_0.5fr_0.5fr] items-center gap-6 ${darker && 'bg-slate-300'} py-2 px-2`}
     >
       {img ? (
         <img src={profilePic} alt={`${username} profile pic`} width={32} className="rounded-full" />
@@ -30,10 +30,10 @@ export function UserListItem({ email, profilePic, username, darker, id, links = 
       <span>{email}</span>
       {links ? (
         <>
-          <Link to={`/users/update/${username}`} aria-disabled={isPending}>
+          <Link to={`/users/update/${username}`} aria-disabled={isPending} className="w-min">
             <Button>Details</Button>
           </Link>
-          <Button onClick={handleDelete} disabled={isPending}>
+          <Button onClick={handleDelete} disabled={isPending} className="w-min">
             Supprimer
           </Button>
         </>

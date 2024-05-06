@@ -1,46 +1,49 @@
-import { SyntheticEvent, useCallback } from 'react'
 import { Navigate } from 'react-router-dom'
 import useConversationList from '../../hooks/conversations/useConversationList'
 import useCreateMessage from '../../hooks/messages/useCreateMessage'
+import { useForm } from 'react-hook-form'
+import Container from '../../components/Container'
+import { Button } from '../../components/Form/Button'
+import { FormInput } from '../../components/Form/Input'
+import { FormSelect } from '../../components/Form/Select'
+
+interface FormInputs {
+  content: string
+  conversationId: string
+}
 
 const CreateMessage: React.FC = () => {
-  const { mutate, isError, isSuccess } = useCreateMessage()
-  const { data: conversation, isSuccess: isConversationSuccess } = useConversationList()
+  const { mutate, isSuccess } = useCreateMessage()
+  const { data: conversation, isLoading } = useConversationList()
+  const { register, handleSubmit } = useForm<FormInputs>()
 
-  const handleCreateMessage = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault()
+  const onSubmit = handleSubmit((datas) => {
+    const formData = new FormData()
+    formData.append('content', datas.content)
+    formData.append('conversationId', datas.conversationId)
 
-    const data = new FormData(event.currentTarget)
-
-    mutate(data)
-  }, [])
+    mutate(formData)
+  })
 
   if (isSuccess) {
     return <Navigate to="/messages" />
   }
 
   return (
-    <>
-      <div className="w-full ">
-        <div className=" w-full">
-          <div className="mt-10 flex items-center justify-center">
-            {isError && <p>Error fetching Messages</p>}
-            <form className="grid grid-cols-1 p-2 m-2 bg-[#aeaeae] text-center" onSubmit={handleCreateMessage}>
-              <input className="m-2" type="text" name="content" placeholder="Content" />
-              <select className="m-2" name="conversationId">
-                {isConversationSuccess &&
-                  conversation.map((conversation, index) => (
-                    <option key={index} value={conversation.id}>
-                      {conversation.title}
-                    </option>
-                  ))}
-              </select>
-              <input className="bg-[#d4f8d7]" type="submit" value="S'enregistrer" />
-            </form>
-          </div>
-        </div>
-      </div>
-    </>
+    <div className="self-start">
+      <form onSubmit={onSubmit}>
+        <Container footer={<Button submit>Créer</Button>}>
+          <FormInput type="text" label="Contenue" {...register('content')}></FormInput>
+          <FormSelect
+            label="Conversation id"
+            defaultValue="Choississez une conversation"
+            disabled={isLoading}
+            options={conversation?.map((c) => ({ key: c.title, value: c.id })) ?? []}
+            {...register('conversationId')}
+          ></FormSelect>
+        </Container>
+      </form>
+    </div>
   )
 }
 

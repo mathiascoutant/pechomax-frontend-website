@@ -1,74 +1,68 @@
-import { SyntheticEvent, useCallback } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
 import useMessage from '../../hooks/messages/useMessage'
 import useUpdateMessage from '../../hooks/messages/useUpdateMessage'
-import { Messages } from '../../types/message'
+import { useForm } from 'react-hook-form'
+import Container from '../../components/Container'
+import { Button } from '../../components/Form/Button'
+import { FormInput } from '../../components/Form/Input'
+
+interface FormInputs {
+  content: string
+}
 
 function UpdateMessage() {
-  const queryClient = useQueryClient()
   const { id } = useParams<{ id: string }>()
-  const { data: message, isLoading, isSuccess, isError } = useMessage(id ?? '')
-  const { mutate, isSuccess: mutationSuccess } = useUpdateMessage()
+  const { data: message, isLoading: messageIsLoading, isSuccess, isError } = useMessage(id ?? '')
+  const { mutate, isSuccess: mutationSuccess, isPending } = useUpdateMessage()
+  const {
+    register,
+    handleSubmit,
+    formState: { isLoading },
+  } = useForm<FormInputs>({ values: { content: message?.content ?? '' } })
 
-  const handleSubmit = useCallback(
-    async (e: SyntheticEvent<HTMLFormElement>) => {
-      e.preventDefault()
+  const onSubmit = handleSubmit((datas) => {
+    const formData = new FormData()
+    if (datas.content) formData.append('content', datas.content)
+    formData.append('id', message?.id ?? '')
 
-      const formData = new FormData(e.currentTarget)
-
-      const putData = {
-        id: message?.id ?? '',
-        content: formData.get('content')?.toString(),
-      }
-
-      mutate(putData)
-
-      queryClient.setQueryData(['message', message ?? ''], (old: Messages) => ({ ...old, ...putData }))
-    },
-    [message]
-  )
+    mutate(formData)
+  })
 
   if (mutationSuccess) {
     return <Navigate to="/messages" />
   }
 
   return (
-    <>
-      <div className="w-9/12 mx-auto mt-10">
-        {isLoading && <p>Loading...</p>}
-        {isError && <p>Error fetching Messages</p>}
+    <div className="self-start">
+      <form onSubmit={onSubmit}>
+        {messageIsLoading && <span>Loading...</span>}
+        {isError && <span>Une erreur s'est produite, veuillez réessayer</span>}
         {isSuccess && (
-          <form onSubmit={handleSubmit}>
-            <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
-              <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
-                <div className="w-fit">
-                  <p className="mb-4">Id:</p>
-                  <p className="mb-4">Content:</p>
-                  <p className="mb-4">UserId:</p>
-                  <p className="mb-4">Date de création:</p>
-                  <p className="mb-4">Date de modification:</p>
-                </div>
-                <div>
-                  <p className="mb-4">{message.id}</p>
-                  <input
-                    className="mb-4"
-                    type="text"
-                    name="content"
-                    defaultValue={message.content}
-                    placeholder="Content"
-                  />
-                  <p className="mb-4">{message.userId}</p>
-                  <p className="mb-4">{message.createdAt}</p>
-                  <p className="mb-4">{message.updatedAt}</p>
-                </div>
-                <button className="bg-[#A7C4E4] w-fit p-1">Modifier</button>
-              </div>
-            </div>
-          </form>
+          <Container
+            footer={
+              <Button submit disabled={isLoading || isPending}>
+                Enregistrer
+              </Button>
+            }
+          >
+            <FormInput
+              type="text"
+              label="Identifiant"
+              name=""
+              onBlur={async () => void 0}
+              onChange={async () => void 0}
+              disabled
+            ></FormInput>
+            <FormInput
+              type="text"
+              label="Contenu"
+              disabled={isLoading || isPending}
+              {...register('content')}
+            ></FormInput>
+          </Container>
         )}
-      </div>
-    </>
+      </form>
+    </div>
   )
 }
 
