@@ -19,7 +19,7 @@ export function UserListItem({ email, profilePic, username, darker, id, links = 
 
   return (
     <div
-      className={`w-full grid grid-cols-[max-content_1fr_1fr_0.5fr_0.5fr] gap-6 items-center justify-items-center ${darker && 'bg-slate-300'} py-2 px-2`}
+      className={`w-full grid grid-cols-[max-content_1fr_1fr_0.5fr_0.5fr] gap-6 ${darker && 'bg-slate-300'} py-2 px-2`}
     >
       {img ? (
         <img src={profilePic} alt={`${username} profile pic`} width={32} className="rounded-full" />

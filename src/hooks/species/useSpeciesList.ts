@@ -5,11 +5,11 @@ import { Species } from '../../types/species'
 
 type QueryReturn = Species[]
 
-export default function useSpeciesList() {
+export default function useSpeciesList(page: number = 1) {
   return useQuery<QueryReturn, QueryError>({
-    queryKey: ['species-list'],
+    queryKey: ['species-list', page],
     queryFn: async () => {
-      const response = await AxosClient.get<QueryReturn>('/species', { withCredentials: true })
+      const response = await AxosClient.get<QueryReturn>(`/species?page=${page}`, { withCredentials: true })
 
       return response.data
     },
