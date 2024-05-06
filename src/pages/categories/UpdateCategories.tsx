@@ -1,62 +1,43 @@
-import { SyntheticEvent, useCallback } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
-import { useQueryClient } from '@tanstack/react-query'
 import useCategorie from '../../hooks/categories/useCategories'
 import useUpdateCategorie from '../../hooks/categories/useUpdateCategories'
-import { Categorie } from '../../types/categorie'
+import { useForm } from 'react-hook-form'
+import { FormInput } from '../../components/Form/Input'
+import Container from '../../components/Container'
+import { Button } from '../../components/Form/Button'
+
+interface FormInput {
+  name: string
+}
 
 function UpdateCategorie() {
-  const queryClient = useQueryClient()
   const { id } = useParams<{ id: string }>()
   const { data: categorie, isLoading, isSuccess, isError } = useCategorie(id ?? '')
   const { mutate, isSuccess: mutationSuccess } = useUpdateCategorie()
+  const { register, handleSubmit } = useForm<FormInput>({
+    values: { name: categorie?.name ?? '' },
+  })
 
-  const handleSubmit = useCallback(
-    async (e: SyntheticEvent<HTMLFormElement>) => {
-      e.preventDefault()
-
-      const formData = new FormData(e.currentTarget)
-
-      const putData = {
-        id: categorie?.id ?? '',
-        name: formData.get('name')?.toString(),
-      }
-
-      mutate(putData)
-
-      queryClient.setQueryData(['categorie', categorie ?? ''], (old: Categorie) => ({ ...old, ...putData }))
-    },
-    [categorie]
-  )
+  const onSubmit = handleSubmit((datas) => {
+    mutate({ id: categorie?.id ?? '', ...datas })
+  })
 
   if (mutationSuccess) {
     return <Navigate to="/categories" />
   }
 
   return (
-    <>
-      <div className="w-9/12 mx-auto mt-10">
-        {isLoading && <p>Loading...</p>}
-        {isError && <p>Error fetching Categories</p>}
+    <div className="self-start">
+      <form onSubmit={onSubmit}>
+        {isLoading && <span>Loading...</span>}
+        {isError && <span>An error occured, please try again</span>}
         {isSuccess && (
-          <form onSubmit={handleSubmit}>
-            <div className="bg-slate-100 p-3 grid grid-cols-1 gap-20">
-              <div className="grid grid-cols-2 bg-white rounded-md  p-2 gap-4">
-                <div className="w-fit">
-                  <p className="mb-4">Id:</p>
-                  <p className="mb-4">Name:</p>
-                </div>
-                <div>
-                  <p className="mb-4">{categorie.id}</p>
-                  <input className="mb-4" type="text" name="name" defaultValue={categorie.name} placeholder="Name" />
-                </div>
-                <button className="bg-[#A7C4E4] w-fit p-1">Modifier</button>
-              </div>
-            </div>
-          </form>
+          <Container footer={<Button submit>Enregistrer</Button>}>
+            <FormInput label="Nom" type="text" {...register('name')}></FormInput>
+          </Container>
         )}
-      </div>
-    </>
+      </form>
+    </div>
   )
 }
 

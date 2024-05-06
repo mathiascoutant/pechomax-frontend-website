@@ -5,11 +5,11 @@ import AxosClient from '../../helpers/axios'
 
 type QueryReturn = Categorie[]
 
-export default function useCategorieList() {
+export default function useCategorieList(page: number = 1) {
   return useQuery<QueryReturn, QueryError>({
-    queryKey: ['category-list'],
+    queryKey: ['category-list', page],
     queryFn: async () => {
-      const response = await AxosClient.get<QueryReturn>('/categories', { withCredentials: true })
+      const response = await AxosClient.get<QueryReturn>(`/categories?page=${page}`, { withCredentials: true })
 
       return response.data
     },
