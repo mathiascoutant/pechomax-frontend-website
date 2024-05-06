@@ -12,24 +12,24 @@ export default function ProtectedLayout() {
 
   if (isError) {
     return (
-      <div>
-        <p>There has been an error</p>
+      <div className="flex flex-col justify-center items-center h-full">
+        <p>Il y a eu une erreur</p>
         <p>{error?.response?.data?.message}</p>
         <Link to="/login" className="text-blue-300">
-          got to login
+          S'identifier
         </Link>
       </div>
     )
   }
 
   if (role !== 'Admin') {
-    return <div>Vous n'êtes pas un pécheur suprem !</div>
+    return <div>Vous n'êtes pas Admin</div>
   }
 
   return (
     <>
       <Header />
-      <div className="flex flex-cols-3 w-full">
+      <div className="flex flex-cols-3 w-max">
         <NavBar />
         <Outlet />
       </div>
