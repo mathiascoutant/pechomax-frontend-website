@@ -5,11 +5,11 @@ import AxosClient from '../../helpers/axios'
 
 type QueryReturn = User[]
 
-export default function useUserList(page: number = 0) {
+export default function useUserList(page: number = 1) {
   return useQuery<QueryReturn, QueryError>({
     queryKey: ['user-list', page],
     queryFn: async () => {
-      const response = await AxosClient.get<QueryReturn>(`/users?page=${page ?? 0}`, { withCredentials: true })
+      const response = await AxosClient.get<QueryReturn>(`/users?page=${page}`, { withCredentials: true })
 
       return response.data
     },

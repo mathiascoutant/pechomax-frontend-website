@@ -5,7 +5,7 @@ import { Messages } from '../../types/message'
 
 type QueryReturn = Messages[]
 
-export default function useConversationList(page: number = 1) {
+export default function useMessageList(page: number = 1) {
   return useQuery<QueryReturn, QueryError>({
     queryKey: ['message-list', page],
     queryFn: async () => {

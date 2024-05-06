@@ -3,7 +3,7 @@ import { QueryError } from '../../types/query'
 import AxosClient from '../../helpers/axios'
 import { Messages } from '../../types/message'
 
-export default function useUpdateConversation() {
+export default function useUpdateMessage() {
   return useMutation<Messages, QueryError, FormData>({
     mutationKey: ['updateMessage'],
     mutationFn: async (Message) => {

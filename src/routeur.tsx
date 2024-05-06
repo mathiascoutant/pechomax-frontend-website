@@ -26,6 +26,7 @@ import ListLevels from './pages/levels/ListLevels'
 import UpdateLevel from './pages/levels/UpdateLevel'
 import ProtectedLayout from './layouts/ProtectedLayout'
 import AuthLayout from './layouts/AuthLayout'
+import Home from './pages/Home'
 
 const AppRouter = () => {
   return (
@@ -35,7 +36,8 @@ const AppRouter = () => {
           <Route path="/init" element={<Init />} />
           <Route path="/login" element={<Login />} />
         </Route>
-        <Route path="/" element={<ProtectedLayout />}>
+        <Route element={<ProtectedLayout />}>
+          <Route path="/" element={<Home />} />
           <Route path="/users" element={<ListUsers />} />
           <Route path="/users/update/:username" element={<UpdateUser />} />
           <Route path="/categories" element={<ListCategories />} />
