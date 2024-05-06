@@ -4,6 +4,7 @@ import { UseFormRegister } from 'react-hook-form'
 interface InputProps {
   label: string
   type: HTMLInputTypeAttribute
+  step?: string
   defaultValue?: string
   children?: React.ReactNode
 }
@@ -24,6 +25,7 @@ export const FormInput = forwardRef<HTMLInputElement, InputProps & ReturnType<Us
       pattern,
       required,
       defaultValue,
+      step,
       children,
     },
     ref
@@ -47,6 +49,7 @@ export const FormInput = forwardRef<HTMLInputElement, InputProps & ReturnType<Us
             pattern={pattern}
             required={required}
             defaultValue={defaultValue}
+            step={step}
           />
         </label>
         {children}

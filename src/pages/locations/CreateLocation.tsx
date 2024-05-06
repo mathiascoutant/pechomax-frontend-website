@@ -1,45 +1,40 @@
-import { SyntheticEvent, useCallback } from 'react'
 import { Navigate } from 'react-router-dom'
 import useCreateLocation from '../../hooks/locations/useCreateLocation'
+import { useForm } from 'react-hook-form'
+import Container from '../../components/Container'
+import { Button } from '../../components/Form/Button'
+import { FormInput } from '../../components/Form/Input'
+
+interface FormInputs {
+  name: string
+  latitude: string
+  longitude: string
+  description: string
+}
 
 const CreateLocation: React.FC = () => {
-  const { mutate, isError, isSuccess } = useCreateLocation()
+  const { mutate, isSuccess } = useCreateLocation()
+  const { register, handleSubmit } = useForm<FormInputs>()
 
-  const handleCreateLocation = useCallback((event: SyntheticEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    const data = new FormData(event.currentTarget)
-    const postData = {
-      name: data.get('name')?.toString() ?? '',
-      latitude: data.get('latitude')?.toString() ?? '',
-      longitude: data.get('longitude')?.toString() ?? '',
-      description: data.get('description')?.toString() ?? '',
-    }
-
-    mutate(postData)
-  }, [])
+  const onSubmit = handleSubmit((datas) => {
+    mutate(datas)
+  })
 
   if (isSuccess) {
     return <Navigate to="/locations" />
   }
 
   return (
-    <>
-      <div className="w-full">
-        <div className="w-full">
-          <div className="mt-10 flex items-center justify-center">
-            {isError && <p>Error fetching Location</p>}
-            <form className="grid grid-cols-1 p-2 m-2 bg-[#aeaeae] text-center" onSubmit={handleCreateLocation}>
-              <input className="m-2" type="text" name="name" placeholder="Name" />
-              <input className="m-2" type="text" name="longitude" placeholder="Longitude" />
-              <input className="m-2" type="text" name="latitude" placeholder="Latitude" />
-              <input className="m-2" type="text" name="description" placeholder="description" />
-              <input className="m-2 bg-[#d4f8d7]" type="submit" value="S'enregistrer" />
-            </form>
-          </div>
-        </div>
-      </div>
-    </>
+    <div className="self-start">
+      <form onSubmit={onSubmit}>
+        <Container footer={<Button submit>Créer</Button>}>
+          <FormInput label="Nom" type="text" {...register('name')}></FormInput>
+          <FormInput label="Description" type="text" {...register('description')}></FormInput>
+          <FormInput label="Longitude" type="number" step="0.000000000001" {...register('longitude')}></FormInput>
+          <FormInput label="Latitude" type="number" step="0.000000000001" {...register('latitude')}></FormInput>
+        </Container>
+      </form>
+    </div>
   )
 }
 
