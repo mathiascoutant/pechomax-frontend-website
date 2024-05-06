@@ -27,7 +27,7 @@ export default function NavBar() {
     <div className="bg-[#323640] h-full">
       <div className="grid grid-rows-[1fr_7fr_1fr] justify-center h-full">
         <Link to="/" className="flex justify-center items-center">
-          <img className="w-20" src="/src/assets/images/logo.png" alt="" />
+          <img className="w-20" src="/logo.png" alt="" />
         </Link>
         <div className="flex flex-col gap-4 items-center pt-5">
           <NavBarItem link="/users">Utilisateurs</NavBarItem>
